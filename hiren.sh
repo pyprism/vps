@@ -32,3 +32,9 @@ echo "nodejs , nginx , mongodb installation completed "
 pip install shadowsocks
 apt-get install python-m2crypto python-gevent -y
 echo "proxy installed"
+
+#512 swap ! 
+dd if=/dev/zero of=/swapfile bs=1024 count=512k
+mkswap /swapfile
+swapon /swapfile
+echo "/swapfile       none    swap    sw      0       0 " >> /etc/fstab
