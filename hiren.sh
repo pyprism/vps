@@ -28,6 +28,9 @@ apt-get update
 apt-get install nodejs nginx mongodb-10gen -y
 echo "nodejs , nginx , mongodb installation completed "
 
+#php
+apt-get install php5-fpm php5-xcache php5-memcached php5-memcache php5-mcrypt php5-imagick php5-geoip php5-gd php5-dev php5-curl php5-cli php5-mysql libapache2-mod-auth-mysql
+
 #proxy shadowsocks
 pip install shadowsocks
 apt-get install python-m2crypto python-gevent -y
