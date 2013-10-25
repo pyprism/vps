@@ -26,3 +26,8 @@ echo 'deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen' | 
 apt-get update
 apt-get install nodejs nginx mongodb-10gen -y
 echo "nodejs , nginx , mongodb installation completed "
+
+#proxy shadowsocks
+pip install shadowsocks
+apt-get install python-m2crypto python-gevent -y
+echo "proxy installed"
