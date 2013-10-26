@@ -50,7 +50,8 @@ echo "Swap enabled"
 cd /tmp
 wget http://fishshell.com/files/2.0.0/linux/Ubuntu_12.10/i586/fish_2.0.0-201305151006_i386.deb
 dpkg -i fish_2.0.0-201305151006_i386.deb
-chsh -s /usr/bin/fish
+a = which fish
+chsh -s $a
 
 #extra entropy
 apt-get install haveged -y
