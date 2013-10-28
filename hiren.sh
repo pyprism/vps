@@ -41,7 +41,7 @@ dd if=/dev/zero of=/swapfile bs=1024 count=512k
 mkswap /swapfile
 swapon /swapfile
 echo "/swapfile       none    swap    sw      0       0 " >> /etc/fstab
-0 > /proc/sys/vm/swappiness
+echo 0 > /proc/sys/vm/swappiness
 chown root:root /swapfile
 chmod 0600 /swapfile
 echo "Swap enabled"
