@@ -47,9 +47,8 @@ chmod 0600 /swapfile
 echo "Swap enabled"
 
 #fish shell
-cd /tmp
-wget http://fishshell.com/files/2.1.0/linux/Ubuntu/fish_2.1.0-1~precise_i386.deb
-dpkg -i fish_2.0.0-201305151006_i386.deb
+apt-add-repository ppa:fish-shell/release-2 -y
+apt-get update && apt-get install fish -y
 a = which fish
 chsh -s $a
 
