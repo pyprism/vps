@@ -65,3 +65,9 @@ dpkg -i vagrant_1.3.5_i686.deb
 apt-get install linux-headers-$(uname -r) -y
 dpkg-reconfigure virtualbox-dkms
 vagrant box add precise32 http://files.vagrantup.com/precise32.box
+
+#create new user
+echo ":::::Create New User:::::"
+echo "Enter User Name=>"
+read username
+useradd -m $username
