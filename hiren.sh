@@ -1,4 +1,4 @@
-#!/usr/bash
+#!/bin/bash
 
 #date: 20/10/2013 , sunday , 8.32 am 
 
