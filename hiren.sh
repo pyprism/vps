@@ -75,3 +75,4 @@ echo "user created"
 echo "Enter password for new user:"
 passwd $username
 
+git clone https://github.com/pyprism/vps.git
