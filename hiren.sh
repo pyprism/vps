@@ -81,5 +81,7 @@ sudo add-apt-repository 'deb http://ftp.osuosl.org/pub/mariadb/repo/5.5/ubuntu s
 apt-get update
 apt-get install mariadb-server
 
+#Mysql Secure
+mysql_secure_installation
 
 git clone https://github.com/pyprism/vps.git
