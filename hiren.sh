@@ -88,4 +88,8 @@ apt-get install mariadb-server
 #Mysql Secure
 mysql_secure_installation
 
+#Postgresql Latest version
+add-apt-repository ppa:chris-lea/postgresql-9.3 -y
+apt-get update && apt-get install -y postgresql-9.3
+
 git clone https://github.com/pyprism/vps.git
