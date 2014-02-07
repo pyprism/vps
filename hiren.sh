@@ -92,4 +92,9 @@ mysql_secure_installation
 add-apt-repository ppa:chris-lea/postgresql-9.3 -y
 apt-get update && apt-get install -y postgresql-9.3
 
+#redis ! ? :D
+add-apt-repository ppa:chris-lea/redis-server -y
+apt-get update
+apt-get install redis-server
+
 git clone https://github.com/pyprism/vps.git
