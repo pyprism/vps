@@ -14,7 +14,7 @@ apt-get dist-upgrade -y
 echo "Your system up2date"
 
 #basic package installation
-apt-get install vnstat finger htop axel fail2ban sendmail git python-software-properties software-properties-common python-pip nethogs unzip nmap -y
+apt-get install vnstat youtube-dl finger htop axel fail2ban sendmail git python-software-properties software-properties-common python-pip nethogs unzip nmap -y
 echo "Basic package installation complete"
 
 #ppa add
