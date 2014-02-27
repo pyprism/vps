@@ -83,7 +83,7 @@ passwd $username
 sudo apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xcbcb082a1bb943dbb
 sudo add-apt-repository 'deb http://ftp.osuosl.org/pub/mariadb/repo/5.5/ubuntu saucy main'
 apt-get update
-apt-get install mariadb-server
+apt-get install mariadb-server -y
 
 #Mysql Secure
 mysql_secure_installation
@@ -95,6 +95,6 @@ apt-get update && apt-get install -y postgresql-9.3
 #redis ! ? :D
 add-apt-repository ppa:chris-lea/redis-server -y
 apt-get update
-apt-get install redis-server
+apt-get install redis-server -y
 
 git clone https://github.com/pyprism/vps.git
