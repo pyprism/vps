@@ -64,8 +64,8 @@ echo " Haveged installed"
 add-apt-repository ppa:ikuya-fruitsbasket/virtualbox -y
 apt-get update
 apt-get install dpkg-dev virtualbox-dkms -y
-wget https://dl.bintray.com/mitchellh/vagrant/vagrant_1.4.3_i686.deb
-dpkg -i vagrant_1.4.3_i686.deb
+wget https://dl.bintray.com/mitchellh/vagrant/vagrant_1.5.0_i686.deb
+dpkg -i vagrant_1.5.0_i686.deb
 apt-get install linux-headers-$(uname -r) -y
 dpkg-reconfigure virtualbox-dkms
 vagrant box add precise32 http://files.vagrantup.com/precise32.box
