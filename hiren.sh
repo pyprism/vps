@@ -97,4 +97,7 @@ add-apt-repository ppa:chris-lea/redis-server -y
 apt-get update
 apt-get install redis-server -y
 
+#meteorjs
+curl https://install.meteor.com/ | sh
+
 git clone https://github.com/pyprism/vps.git
