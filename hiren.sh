@@ -36,6 +36,12 @@ nisha "nodejs , nginx , mongodb installation complete "
 
 #php
 apt-get install php-apc php5 php5-apcu php5-pgsql php5-fpm php5-xcache php5-memcached php5-json php5-memcache php5-mcrypt php5-imagick php5-geoip php5-gd php5-dev php5-curl php5-cli php5-mysql
+nisha "Php Installed :/ "
+
+# php-mcrypt fix
+ln -s /etc/php5/conf.d/mcrypt.ini /etc/php5/mods-available
+php5enmod mcrypt
+service php5-fpm restart
 
 #composer
 curl -sS https://getcomposer.org/installer | php
