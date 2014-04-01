@@ -114,6 +114,9 @@ apt-get update
 apt-get install redis-server -y
 nisha "Redis Complete"
 
+#https://github.com/lebinh/ngxtop
+pip install ngxtop
+
 #meteorjs
 curl https://install.meteor.com/ | sh
 nisha "Meteorjs Complete"
