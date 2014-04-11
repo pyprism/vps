@@ -19,6 +19,9 @@ apt-get update
 apt-get dist-upgrade -y
 nisha "System Uptodate "
 
+#apt progress bar for new ubuntu 14.04 version
+echo 'Dpkg::Progress-Fancy "1";' > /etc/apt/apt.conf.d/99progressbar
+
 #basic package installation
 apt-get install vnstat youtube-dl finger htop axel fail2ban sendmail git python-software-properties software-properties-common python-pip nethogs unzip nmap -y
 nisha "Basic package installation complete"
