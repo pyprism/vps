@@ -38,7 +38,7 @@ apt-get install nodejs nginx mongodb-10gen -y
 nisha "nodejs , nginx , mongodb installation complete "
 
 #php
-apt-get install php-apc php5 php5-apcu php5-pgsql php5-fpm php5-xcache php5-memcached php5-json php5-memcache php5-mcrypt php5-imagick php5-geoip php5-gd php5-dev php5-curl php5-cli php5-mysql
+apt-get install  php5 php5-pgsql php5-fpm php5-json php5-mcrypt php5-imagick php5-geoip php5-gd php5-dev php5-curl php5-cli php5-mysql
 nisha "Php Installed :/ "
 
 # php-mcrypt fix
@@ -77,15 +77,15 @@ apt-get install haveged -y
 nisha " Haveged installed"
 
 #vagrant 
-add-apt-repository ppa:ikuya-fruitsbasket/virtualbox -y
-apt-get update
-apt-get install dpkg-dev virtualbox-dkms -y
-wget https://dl.bintray.com/mitchellh/vagrant/vagrant_1.5.0_i686.deb
-dpkg -i vagrant_1.5.0_i686.deb
-apt-get install linux-headers-$(uname -r) -y
-dpkg-reconfigure virtualbox-dkms
-vagrant box add precise32 http://files.vagrantup.com/precise32.box
-nisha "vagrant installation complete"
+#add-apt-repository ppa:ikuya-fruitsbasket/virtualbox -y
+#apt-get update
+#apt-get install dpkg-dev virtualbox-dkms -y
+#wget https://dl.bintray.com/mitchellh/vagrant/vagrant_1.5.0_i686.deb
+#dpkg -i vagrant_1.5.0_i686.deb
+#apt-get install linux-headers-$(uname -r) -y
+#dpkg-reconfigure virtualbox-dkms
+#vagrant box add precise32 http://files.vagrantup.com/precise32.box
+#nisha "vagrant installation complete"
 
 #create new user
 echo ":::::Create New User:::::"
@@ -98,7 +98,7 @@ passwd $username
 
 #MariaD
 sudo apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xcbcb082a1bb943dbb
-sudo add-apt-repository 'deb http://ftp.osuosl.org/pub/mariadb/repo/5.5/ubuntu saucy main'
+sudo add-apt-repository 'deb http://mirror.jmu.edu/pub/mariadb/repo/10.0/ubuntu trusty main'
 apt-get update
 apt-get install mariadb-server -y
 nisha "MariaDb installation complete"
@@ -107,9 +107,9 @@ nisha "MariaDb installation complete"
 mysql_secure_installation
 
 #Postgresql Latest version
-add-apt-repository ppa:chris-lea/postgresql-9.3 -y
-apt-get update && apt-get install -y postgresql-9.3
-nisha "PostgreSQL Complete"
+#add-apt-repository ppa:chris-lea/postgresql-9.3 -y
+#apt-get update && apt-get install -y postgresql-9.3
+#nisha "PostgreSQL Complete"
 
 #redis ! ? :D
 add-apt-repository ppa:chris-lea/redis-server -y
