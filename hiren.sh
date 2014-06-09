@@ -97,7 +97,7 @@ passwd $username
 
 #MariaD
 sudo apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xcbcb082a1bb943dbb
-sudo add-apt-repository 'deb http://mirror.jmu.edu/pub/mariadb/repo/10.0/ubuntu trusty main'
+sudo add-apt-repository 'deb http://ftp.utexas.edu/mariadb/repo/5.5/ubuntu trusty main'
 apt-get update
 apt-get install mariadb-server -y
 nisha "MariaDb installation complete"
