@@ -117,8 +117,8 @@ apt-get install redis-server -y
 nisha "Redis Complete"
 
 #https://github.com/lebinh/ngxtop
-pip install ngxtop
-npm install bower
+pip install ngxtop virtualenv
+npm install bower -g
 #meteorjs
 curl https://install.meteor.com/ | sh
 nisha "Meteorjs Complete"
