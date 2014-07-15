@@ -118,7 +118,7 @@ nisha "Redis Complete"
 
 #https://github.com/lebinh/ngxtop
 pip install ngxtop
-
+npm install bower
 #meteorjs
 curl https://install.meteor.com/ | sh
 nisha "Meteorjs Complete"
