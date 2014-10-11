@@ -37,7 +37,7 @@ apt-get install nodejs nginx mongodb-10gen -y
 nisha "nodejs , nginx , mongodb installation complete "
 
 #php
-apt-get install  php5 php5-pgsql php5-fpm php5-json php5-mcrypt php5-imagick php5-geoip php5-gd php5-dev php5-curl php5-cli php5-mysql
+apt-get install  php5 php5-pgsql php5-fpm php5-json php5-mcrypt php5-imagick php5-geoip php5-gd php5-dev php5-curl php5-cli php5-mysql -y
 nisha "Php Installed :/ "
 
 # php-mcrypt fix
