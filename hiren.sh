@@ -106,9 +106,9 @@ nisha "MariaDb installation complete"
 mysql_secure_installation
 
 #Postgresql Latest version
-#add-apt-repository ppa:chris-lea/postgresql-9.3 -y
-#apt-get update && apt-get install -y postgresql-9.3
-#nisha "PostgreSQL Complete"
+add-apt-repository ppa:chris-lea/postgresql-9.3 -y
+apt-get update && apt-get install -y postgresql-9.3
+nisha "PostgreSQL Complete"
 
 #redis ! ? :D
 add-apt-repository ppa:chris-lea/redis-server -y
