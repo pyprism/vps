@@ -23,7 +23,7 @@ nisha "System Uptodate "
 echo 'Dpkg::Progress-Fancy "1";' > /etc/apt/apt.conf.d/99progressbar
 
 #basic package installation
-apt-get install vnstat youtube-dl finger htop docker.io inxi axel fail2ban python-dev sendmail git python-software-properties software-properties-common python-pip nethogs unzip nmap -y
+apt-get install vnstat youtube-dl finger htop python3-dev inxi axel fail2ban python-dev sendmail git python-software-properties software-properties-common python-pip nethogs unzip nmap -y
 nisha "Basic package installation complete"
 
 #ppa add
