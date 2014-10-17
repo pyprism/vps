@@ -107,7 +107,7 @@ mysql_secure_installation
 
 #Postgresql Latest version
 add-apt-repository ppa:chris-lea/postgresql-9.3 -y
-apt-get update && apt-get install -y postgresql-9.3
+apt-get update && apt-get install -y postgresql-9.3 libpq-dev
 nisha "PostgreSQL Complete"
 
 #redis ! ? :D
