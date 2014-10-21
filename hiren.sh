@@ -132,5 +132,6 @@ nisha "Meteorjs Complete"
 curl -L https://github.com/bpinto/oh-my-fish/raw/master/tools/install.fish | fish
 
 git clone https://github.com/pyprism/vps.git
+git clone https://github.com/oussemos/fail2ban-dashboard.git
 
 nisha "All Done . Check If There Is Any Err. "
