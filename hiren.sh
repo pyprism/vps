@@ -68,7 +68,7 @@ nisha "Swap configuration complete"
 #fish shell
 apt-add-repository ppa:fish-shell/release-2 -y
 apt-get update && apt-get install fish -y
-a = which fish
+a=which fish
 chsh -s $a
 
 #extra entropy
