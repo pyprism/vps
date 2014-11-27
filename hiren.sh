@@ -118,7 +118,7 @@ nisha "Redis Complete"
 
 #docker.io
 apt-get install apt-transport-https -y
-add-apt-repository ppa:docker-maint/testing
+add-apt-repository ppa:docker-maint/testing -y
 apt-get update
 apt-get install docker.io
 
