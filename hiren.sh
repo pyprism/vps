@@ -99,7 +99,7 @@ passwd $username
 apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xcbcb082a1bb943db 
 add-apt-repository 'deb http://ams2.mirrors.digitalocean.com/mariadb/repo/5.5/ubuntu trusty main'
 apt-get update
-apt-get install mariadb-server -y
+apt-get install mariadb-server libmysqlclient-dev -y
 nisha "MariaDb installation complete"
 
 #Mysql Secure
