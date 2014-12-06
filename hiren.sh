@@ -75,17 +75,6 @@ chsh -s $a
 apt-get install haveged -y
 nisha " Haveged installed"
 
-#vagrant 
-#add-apt-repository ppa:ikuya-fruitsbasket/virtualbox -y
-#apt-get update
-#apt-get install dpkg-dev virtualbox-dkms -y
-#wget https://dl.bintray.com/mitchellh/vagrant/vagrant_1.5.0_i686.deb
-#dpkg -i vagrant_1.5.0_i686.deb
-#apt-get install linux-headers-$(uname -r) -y
-#dpkg-reconfigure virtualbox-dkms
-#vagrant box add precise32 http://files.vagrantup.com/precise32.box
-#nisha "vagrant installation complete"
-
 #create new user
 echo ":::::Create New User:::::"
 echo "Enter User Name=>"
