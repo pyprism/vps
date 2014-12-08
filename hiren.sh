@@ -33,7 +33,7 @@ echo 'deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen' | 
 
 #mongo , nginx and nodejs installation
 apt-get update
-apt-get install nodejs nginx mongodb-10gen -y
+apt-get install nodejs nginx mongodb-org-server -y
 nisha "nodejs , nginx , mongodb installation complete "
 
 #php
