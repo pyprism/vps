@@ -36,6 +36,10 @@ apt-get update
 apt-get install nodejs nginx mongodb-org-server -y
 nisha "nodejs , nginx , mongodb installation complete "
 
+#php 5.6 ppa
+add-apt-repository ppa:ondrej/php5-5.6 -y
+apt-get update
+
 #php
 apt-get install  php5 php5-pgsql php5-fpm php5-json php5-mcrypt php5-imagick php5-geoip php5-gd php5-dev php5-curl php5-cli php5-mysql -y
 nisha "Php Installed :/ "
