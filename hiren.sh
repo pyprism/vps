@@ -2,7 +2,7 @@
 
 #date: 20/10/2013 , sunday , 8.32 am 
 
-#check if script runned by Mr.Root :P
+#check if script run by Mr.Root :P
 
 if [ "$(id -u)" != "0" ]; then
 	echo "Sorry man, you are not Mr.Root !"
