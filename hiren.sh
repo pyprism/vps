@@ -72,8 +72,8 @@ nisha "Swap configuration complete"
 #fish shell
 apt-add-repository ppa:fish-shell/release-2 -y
 apt-get update && apt-get install fish -y
-a=which fish
-chsh -s $a
+#a=which fish
+#chsh -s $a
 
 #extra entropy
 apt-get install haveged -y
@@ -116,8 +116,8 @@ wget -qO- https://get.docker.com/ | sh
 nisha "Installed Docker"
 
 #https://github.com/lebinh/ngxtop
-pip install ngxtop virtualenv
-npm install bower -g
+pip install ngxtop virtualenv pip --upgrade
+npm install bower slap -g
 #meteorjs
 curl https://install.meteor.com/ | sh
 nisha "Meteorjs Complete"
