@@ -27,13 +27,13 @@ apt-get install vnstat youtube-dl finger htop python3-dev inxi axel fail2ban pyt
 nisha "Basic package installation complete"
 
 #ppa add
-add-apt-repository ppa:chris-lea/node.js -y
-apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10
-echo 'deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen' | tee /etc/apt/sources.list.d/10gen.list
+curl -sL https://deb.nodesource.com/setup | sudo bash -
+sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10
+echo "deb http://repo.mongodb.org/apt/ubuntu "$(lsb_release -sc)"/mongodb-org/3.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.0.list
 
 #mongo , nginx and nodejs installation
 apt-get update
-apt-get install nodejs nginx mongodb-org-server -y
+apt-get install nodejs nginx mongodb-org -y
 nisha "nodejs , nginx , mongodb installation complete "
 
 #php 5.6 ppa
@@ -89,18 +89,20 @@ echo "Enter password for new user:"
 passwd $username
 
 #MariaD
-apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xcbcb082a1bb943db 
-add-apt-repository 'deb http://ams2.mirrors.digitalocean.com/mariadb/repo/5.5/ubuntu trusty main'
-apt-get update
-apt-get install mariadb-server libmysqlclient-dev -y
-nisha "MariaDb installation complete"
+#apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xcbcb082a1bb943db 
+#add-apt-repository 'deb http://ams2.mirrors.digitalocean.com/mariadb/repo/5.5/ubuntu trusty main'
+#apt-get update
+apt-get install mysql-server mysql-client libmysqlclient-dev -y
+nisha "MySQL installation complete"
 
 #Mysql Secure
 mysql_secure_installation
 
 #Postgresql Latest version
-add-apt-repository ppa:chris-lea/postgresql-9.3 -y
-apt-get update && apt-get install -y postgresql-9.3 libpq-dev postgresql-contrib
+echo "/etc/apt/sources.list.d/pgdg.list"  || tee "/etc/apt/sources.list.d/pgdg.list"
+wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+apt-get update 
+apt-get install -y postgresql-9.4 libpq-dev postgresql-contrib
 nisha "PostgreSQL Complete"
 
 #redis ! ? :D
@@ -110,10 +112,8 @@ apt-get install redis-server -y
 nisha "Redis Complete"
 
 #docker.io
-apt-get install apt-transport-https -y
-add-apt-repository ppa:docker-maint/testing -y
-apt-get update
-apt-get install docker.io
+wget -qO- https://get.docker.com/ | sh
+nisha "Installed Docker"
 
 #https://github.com/lebinh/ngxtop
 pip install ngxtop virtualenv
