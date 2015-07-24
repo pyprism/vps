@@ -115,9 +115,12 @@ nisha "Redis Complete"
 wget -qO- https://get.docker.com/ | sh
 nisha "Installed Docker"
 
-#https://github.com/lebinh/ngxtop
+# some useful packages 
+# https://github.com/lebinh/ngxtop
 pip install ngxtop virtualenv pip --upgrade
+pip install pgcli
 npm install bower slap -g
+
 #meteorjs
 curl https://install.meteor.com/ | sh
 nisha "Meteorjs Complete"
