@@ -99,9 +99,9 @@ nisha "MySQL installation complete"
 mysql_secure_installation
 
 #Postgresql Latest version
-echo "/etc/apt/sources.list.d/pgdg.list"  || tee "/etc/apt/sources.list.d/pgdg.list"
-wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
-apt-get update 
+#echo "/etc/apt/sources.list.d/pgdg.list"  || tee "/etc/apt/sources.list.d/pgdg.list"
+#wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+#apt-get update 
 apt-get install -y postgresql-9.4 libpq-dev postgresql-contrib
 nisha "PostgreSQL Complete"
 
