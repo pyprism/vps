@@ -102,7 +102,8 @@ mysql_secure_installation
 #echo "/etc/apt/sources.list.d/pgdg.list"  || tee "/etc/apt/sources.list.d/pgdg.list"
 #wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
 #apt-get update 
-apt-get install -y postgresql-9.4 libpq-dev postgresql-contrib
+#apt-get install -y postgresql-9.4 libpq-dev postgresql-contrib
+apt-get install -y postgresql libpq-dev postgresql-contrib
 nisha "PostgreSQL Complete"
 
 #redis ! ? :D
@@ -125,7 +126,8 @@ npm install bower slap -g
 curl https://install.meteor.com/ | sh
 nisha "Meteorjs Complete"
 
-curl -L https://github.com/bpinto/oh-my-fish/raw/master/tools/install.fish | fish
+#Oh my fish !
+curl -L https://github.com/oh-my-fish/oh-my-fish/raw/master/bin/install | fish
 
 git clone https://github.com/pyprism/vps.git
 git clone https://github.com/oussemos/fail2ban-dashboard.git
