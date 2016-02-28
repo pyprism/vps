@@ -126,6 +126,7 @@ npm install bower slap -g
 curl https://install.meteor.com/ | sh
 nisha "Meteorjs Complete"
 
+pip install --upgrade pip
 #Oh my fish !
 curl -L https://github.com/oh-my-fish/oh-my-fish/raw/master/bin/install | fish
 
@@ -133,3 +134,4 @@ git clone https://github.com/pyprism/vps.git
 git clone https://github.com/oussemos/fail2ban-dashboard.git
 
 nisha "All Done . Check If There Is Any Err. "
+
