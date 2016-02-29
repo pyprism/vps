@@ -127,6 +127,8 @@ curl https://install.meteor.com/ | sh
 nisha "Meteorjs Complete"
 
 pip install --upgrade pip
+pip install supervisor
+
 #Oh my fish !
 curl -L https://github.com/oh-my-fish/oh-my-fish/raw/master/bin/install | fish
 
