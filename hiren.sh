@@ -16,26 +16,24 @@ nisha (){
  echo '######################################################'
 }
 #now system update 
-apt-get update
-apt-get dist-upgrade -y
+apt  update
+apt   dist-upgrade -y
 nisha "System Uptodate "
 
 #apt progress bar for new ubuntu 14.04 version
-echo 'Dpkg::Progress-Fancy "1";' > /etc/apt/apt.conf.d/99progressbar
+#echo 'Dpkg::Progress-Fancy "1";' > /etc/apt/apt.conf.d/99progressbar
 
 #basic package installation
 apt-get install libffi-dev vnstat youtube-dl finger htop python3-dev inxi axel fail2ban python-dev sendmail git python-software-properties software-properties-common python-pip nethogs unzip nmap -y
 nisha "Basic package installation complete"
 
 #ppa add
-curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -
-sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10
-echo "deb http://repo.mongodb.org/apt/ubuntu "$(lsb_release -sc)"/mongodb-org/3.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.0.list
+curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
 
-#mongo , nginx and nodejs installation
+#nginx and nodejs installation
 apt-get update
-apt-get install nodejs nginx mongodb-org -y
-nisha "nodejs , nginx , mongodb installation complete "
+apt-get install nodejs nginx -y
+nisha "nodejs , nginx installation complete "
 
 #php 5.6 ppa
 add-apt-repository ppa:ondrej/php5-5.6 -y
