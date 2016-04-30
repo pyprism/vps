@@ -24,29 +24,26 @@ nisha "System Uptodate "
 #echo 'Dpkg::Progress-Fancy "1";' > /etc/apt/apt.conf.d/99progressbar
 
 #basic package installation
-apt-get install libffi-dev vnstat youtube-dl finger htop python3-dev inxi axel fail2ban python-dev sendmail git python-software-properties software-properties-common python-pip nethogs unzip nmap -y
+apt-get install zsh libffi-dev vnstat youtube-dl finger htop python3-dev inxi axel fail2ban python-dev sendmail git python-software-properties software-properties-common python-pip nethogs unzip nmap -y
 nisha "Basic package installation complete"
 
 #ppa add
 curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
 
 #nginx and nodejs installation
-apt-get update
-apt-get install nodejs nginx -y
+apt  update
+apt  install nodejs nginx -y
 nisha "nodejs , nginx installation complete "
 
-#php 5.6 ppa
-add-apt-repository ppa:ondrej/php5-5.6 -y
-apt-get update
 
 #php
-apt-get install  php5 php5-pgsql php5-fpm php5-json php5-mcrypt php5-imagick php5-geoip php5-gd php5-dev php5-curl php5-cli php5-mysql -y
+apt-get install  php7.0 php7.0-pgsql php7.0-fpm php7.0-json php7.0-mcrypt php-geoip php7.0-gd php7.0-dev php7.0-curl php7.0-cli php7.0-mysql -y
 nisha "Php Installed :/ "
 
 # php-mcrypt fix
-ln -s /etc/php5/conf.d/mcrypt.ini /etc/php5/mods-available
-php5enmod mcrypt
-service php5-fpm restart
+#ln -s /etc/php5/conf.d/mcrypt.ini /etc/php5/mods-available
+#php5enmod mcrypt
+#service php5-fpm restart
 
 #composer
 curl -sS https://getcomposer.org/installer | php
@@ -54,9 +51,9 @@ mv composer.phar /usr/local/bin/composer
 nisha "composer installation complete"
 
 #proxy shadowsocks
-pip install shadowsocks
-apt-get install python-m2crypto python-gevent -y
-nisha "python proxy installation complete"
+#pip install shadowsocks
+#apt-get install python-m2crypto python-gevent -y
+#nisha "python proxy installation complete"
 
 #512 swap ! 
 dd if=/dev/zero of=/swapfile bs=1024 count=512k
@@ -69,8 +66,8 @@ chmod 0600 /swapfile
 nisha "Swap configuration complete"
 
 #fish shell
-apt-add-repository ppa:fish-shell/release-2 -y
-apt-get update && apt-get install fish -y
+#apt-add-repository ppa:fish-shell/release-2 -y
+#apt-get update && apt-get install fish -y
 #a=which fish
 #chsh -s $a
 
@@ -91,7 +88,7 @@ passwd $username
 #apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xcbcb082a1bb943db 
 #add-apt-repository 'deb http://ams2.mirrors.digitalocean.com/mariadb/repo/5.5/ubuntu trusty main'
 #apt-get update
-apt-get install mysql-server mysql-client libmysqlclient-dev -y
+apt  install mysql-server mysql-client libmysqlclient-dev -y
 nisha "MySQL installation complete"
 
 #Mysql Secure
@@ -102,17 +99,19 @@ mysql_secure_installation
 #wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
 #apt-get update 
 #apt-get install -y postgresql-9.4 libpq-dev postgresql-contrib
-apt-get install -y postgresql libpq-dev postgresql-contrib
+apt  install -y postgresql libpq-dev postgresql-contrib
 nisha "PostgreSQL Complete"
 
 #redis ! ? :D
-add-apt-repository ppa:chris-lea/redis-server -y
-apt-get update
-apt-get install redis-server -y
+#add-apt-repository ppa:chris-lea/redis-server -y
+apt install redis-server -y
 nisha "Redis Complete"
 
 #docker.io
-wget -qO- https://get.docker.com/ | sh
+apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
+echo "deb https://apt.dockerproject.org/repo ubuntu-xenial main" > "/etc/apt/sources.list.d/docker.list"
+apt update
+apt install docker-engine
 nisha "Installed Docker"
 
 # some useful packages 
@@ -121,15 +120,12 @@ pip install ngxtop virtualenv pip --upgrade
 pip install pgcli
 npm install bower slap -g
 
-#meteorjs
-curl https://install.meteor.com/ | sh
-nisha "Meteorjs Complete"
 
 pip install --upgrade pip
 pip install supervisor
 
 #Oh my fish !
-curl -L https://github.com/oh-my-fish/oh-my-fish/raw/master/bin/install | fish
+#curl -L https://github.com/oh-my-fish/oh-my-fish/raw/master/bin/install | fish
 
 git clone https://github.com/pyprism/vps.git
 git clone https://github.com/oussemos/fail2ban-dashboard.git
