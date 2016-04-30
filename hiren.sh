@@ -23,6 +23,10 @@ nisha "System Uptodate "
 #apt progress bar for new ubuntu 14.04 version
 #echo 'Dpkg::Progress-Fancy "1";' > /etc/apt/apt.conf.d/99progressbar
 
+# webupd8 ppa for youtube-dl
+add-apt-repository ppa:nilarimogard/webupd8
+apt update
+
 #basic package installation
 apt-get install zsh libffi-dev vnstat youtube-dl finger htop python3-dev inxi axel fail2ban python-dev sendmail git python-software-properties software-properties-common python-pip nethogs unzip nmap -y
 nisha "Basic package installation complete"
