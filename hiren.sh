@@ -41,7 +41,7 @@ nisha "nodejs , nginx installation complete "
 
 
 #php
-apt-get install  php7.0 php7.0-pgsql php7.0-fpm php7.0-json php7.0-mcrypt php-geoip php7.0-gd php7.0-dev php7.0-curl php7.0-cli php7.0-mysql -y
+apt-get install  php7.0 php7.0-mbstring php7.0-pgsql php7.0-fpm php7.0-json php7.0-mcrypt php-geoip php7.0-gd php7.0-dev php7.0-curl php7.0-cli php7.0-mysql -y
 nisha "Php Installed :/ "
 
 # php-mcrypt fix
