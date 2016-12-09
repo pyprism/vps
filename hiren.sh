@@ -118,6 +118,11 @@ apt update
 apt install docker-engine -y
 nisha "Installed Docker"
 
+# for  nginx
+
+openssl dhparam -out /etc/ssl/certs/dhparam.pem 4096
+nisha "dhparam generation completed"
+
 # some useful packages 
 # https://github.com/lebinh/ngxtop
 pip install ngxtop virtualenv pip --upgrade
