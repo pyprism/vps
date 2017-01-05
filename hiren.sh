@@ -60,7 +60,7 @@ nisha "composer installation complete"
 #nisha "python proxy installation complete"
 
 #2G swap ! 
-dd if=/dev/zero of=/swapfile bs=1G count=2
+dd if=/dev/zero of=/swapfile bs=4024 count=512k
 mkswap /swapfile
 swapon /swapfile
 echo "/swapfile       none    swap    sw      0       0 " >> /etc/fstab
