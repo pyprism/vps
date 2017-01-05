@@ -59,7 +59,7 @@ nisha "composer installation complete"
 #apt-get install python-m2crypto python-gevent -y
 #nisha "python proxy installation complete"
 
-#512 swap ! 
+#2G swap ! 
 dd if=/dev/zero of=/swapfile bs=1G count=2
 mkswap /swapfile
 swapon /swapfile
