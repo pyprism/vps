@@ -133,8 +133,14 @@ npm install bower slap -g
 pip install --upgrade pip
 pip install supervisor
 
-#Oh my fish !
-#curl -L https://github.com/oh-my-fish/oh-my-fish/raw/master/bin/install | fish
+# goaccess installation
+echo "deb http://deb.goaccess.io/ $(lsb_release -cs) main" | tee -a /etc/apt/sources.list.d/goaccess.list
+wget -O - https://deb.goaccess.io/gnugpg.key | apt-key add -
+apt-get update
+apt-get install goaccess
+
+#Oh my zsh !
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 
 git clone https://github.com/pyprism/vps.git
 git clone https://github.com/oussemos/fail2ban-dashboard.git
