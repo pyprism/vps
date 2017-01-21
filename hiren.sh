@@ -24,7 +24,7 @@ nisha "System Uptodate "
 #echo 'Dpkg::Progress-Fancy "1";' > /etc/apt/apt.conf.d/99progressbar
 
 # webupd8 ppa for youtube-dl
-add-apt-repository ppa:nilarimogard/webupd8
+add-apt-repository ppa:nilarimogard/webupd8 -y
 apt update
 
 #basic package installation
