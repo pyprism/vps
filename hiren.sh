@@ -128,9 +128,6 @@ nisha "dhparam generation completed"
 pip install ngxtop virtualenv pip --upgrade
 pip install pgcli
 npm install bower slap -g
-
-
-pip install --upgrade pip
 pip install supervisor
 
 # goaccess installation
@@ -144,6 +141,9 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/mas
 
 #zsh fish like autocomplete
 git clone git://github.com/zsh-users/zsh-autosuggestions $ZSH_CUSTOM/plugins/zsh-autosuggestions
+
+#timezone settings
+dpkg-reconfigure tzdata
 
 git clone https://github.com/pyprism/vps.git
 git clone https://github.com/oussemos/fail2ban-dashboard.git
