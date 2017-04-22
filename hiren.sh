@@ -107,7 +107,7 @@ apt  install -y postgresql libpq-dev postgresql-contrib
 nisha "PostgreSQL Complete"
 
 #redis ! ? :D
-#add-apt-repository ppa:chris-lea/redis-server -y
+add-apt-repository ppa:chris-lea/redis-server -y
 apt install redis-server -y
 nisha "Redis Complete"
 
