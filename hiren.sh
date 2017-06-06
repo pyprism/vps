@@ -136,6 +136,11 @@ wget -O - https://deb.goaccess.io/gnugpg.key | apt-key add -
 apt-get update
 apt-get install goaccess
 
+# python 3.6
+add-apt-repository ppa:jonathonf/python-3.6
+apt update
+apt install python3.6 python3.6-dev
+
 #Oh my zsh !
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 
