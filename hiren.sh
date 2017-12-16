@@ -32,7 +32,7 @@ apt-get install zsh ntp libffi-dev vnstat libpango1.0-0 youtube-dl letsencrypt f
 nisha "Basic package installation complete"
 
 #ppa add
-curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
+curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
 
 #nginx and nodejs installation
 apt  update
