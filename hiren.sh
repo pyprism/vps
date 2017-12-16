@@ -141,6 +141,11 @@ add-apt-repository ppa:jonathonf/python-3.6
 apt update
 apt install python3.6 python3.6-dev
 
+# certbot
+add-apt-repository ppa:certbot/certbot
+apt update
+apt install python-certbot-nginx 
+
 #Oh my zsh !
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 
