@@ -137,7 +137,7 @@ apt-get update
 apt-get install goaccess
 
 # python 3.6
-add-apt-repository ppa:jonathonf/python-3.6
+add-apt-repository ppa:deadsnakes/ppa
 apt update
 apt install python3.6 python3.6-dev
 
