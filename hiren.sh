@@ -33,6 +33,7 @@ nisha "Basic package installation complete"
 
 #ppa add
 curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
+add-apt-repository ppa:nginx/stable
 
 #nginx and nodejs installation
 apt  update
