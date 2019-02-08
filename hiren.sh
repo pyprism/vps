@@ -28,7 +28,7 @@ add-apt-repository ppa:nilarimogard/webupd8 -y
 apt update
 
 #basic package installation
-apt-get install zsh ntp libffi-dev vnstat libpango1.0-0 youtube-dl letsencrypt finger htop python3-dev inxi axel fail2ban python-dev sendmail git software-properties-common python-pip nethogs unzip nmap -y
+apt-get install zsh ntp libffi-dev vnstat libpango1.0-0 youtube-dl letsencrypt finger htop python3-dev inxi axel fail2ban python-dev sendmail git python-pip nethogs unzip nmap -y
 nisha "Basic package installation complete"
 
 #ppa add
