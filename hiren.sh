@@ -41,8 +41,8 @@ nisha "nodejs , nginx installation complete "
 
 
 #php
-apt-get install  php7.0 php7.0-mbstring php7.0-pgsql php7.0-fpm php7.0-json php7.0-mcrypt php-geoip php7.0-gd php7.0-dev php7.0-curl php7.0-cli php7.0-mysql php7.0-bcmath php-bcmath -y
-nisha "Php Installed :/ "
+#apt-get install  php7.0 php7.0-mbstring php7.0-pgsql php7.0-fpm php7.0-json php7.0-mcrypt php-geoip php7.0-gd php7.0-dev php7.0-curl php7.0-cli php7.0-mysql php7.0-bcmath php-bcmath -y
+#nisha "Php Installed :/ "
 
 # php-mcrypt fix
 #ln -s /etc/php5/conf.d/mcrypt.ini /etc/php5/mods-available
@@ -50,9 +50,9 @@ nisha "Php Installed :/ "
 #service php5-fpm restart
 
 #composer
-curl -sS https://getcomposer.org/installer | php
-mv composer.phar /usr/local/bin/composer
-nisha "composer installation complete"
+#curl -sS https://getcomposer.org/installer | php
+#mv composer.phar /usr/local/bin/composer
+#nisha "composer installation complete"
 
 #proxy shadowsocks
 #pip install shadowsocks
@@ -127,7 +127,7 @@ nisha "dhparam generation completed"
 # https://github.com/lebinh/ngxtop
 pip install ngxtop virtualenv pip --upgrade
 pip install pgcli
-npm install bower slap -g
+npm install slap -g
 pip install supervisor
 
 # goaccess installation
@@ -137,9 +137,9 @@ apt-get update
 apt-get install goaccess
 
 # python 3.6
-add-apt-repository ppa:deadsnakes/ppa
-apt update
-apt install python3.6 python3.6-dev
+#add-apt-repository ppa:deadsnakes/ppa
+#apt update
+#apt install python3.6 python3.6-dev
 
 # certbot
 add-apt-repository ppa:certbot/certbot
@@ -153,7 +153,7 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/mas
 git clone git://github.com/zsh-users/zsh-autosuggestions $ZSH_CUSTOM/plugins/zsh-autosuggestions
 
 # CTOP
-wget https://github.com/bcicen/ctop/releases/download/v0.7.1/ctop-0.7.1-linux-amd64 -O /usr/local/bin/ctop
+wget https://github.com/bcicen/ctop/releases/download/v0.7.2/ctop-0.7.1-linux-amd64 -O /usr/local/bin/ctop
 chmod +x /usr/local/bin/ctop
 
 #timezone settings
