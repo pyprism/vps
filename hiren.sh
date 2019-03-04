@@ -88,6 +88,7 @@ useradd -m $username
 echo "user created"
 echo "Enter password for new user:"
 passwd $username
+usermod -a -G sudo $username
 
 #MariaD
 #apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xcbcb082a1bb943db 
