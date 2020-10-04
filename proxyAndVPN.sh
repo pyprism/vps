@@ -21,10 +21,10 @@ if [ $choose == '1' ]; then
 	mkdir proxy && cd proxy
 	echo "Enter password for proxy >"
 	read proxyPass
-	echo "{" >> config.json
-	echo "'server':$ipaddrs," >> config.json
-	echo "'server_port':8388,"  >> config.json
-	echo "'local_port':1083," >> config.json
-	echo "'password':$proxyPass" >> config.json
-	echo "}" >> config.json
+	echo "{
+'server':$ipaddrs,
+'server_port':8388,
+'local_port':1083,
+'password':$proxyPass
+}" >> config.json
 fi
