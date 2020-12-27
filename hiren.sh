@@ -147,9 +147,7 @@ apt-get install goaccess
 #apt install python3.6 python3.6-dev
 
 # certbot
-add-apt-repository ppa:certbot/certbot
-apt update
-apt install python-certbot-nginx 
+apt install python-certbot-nginx certbot
 
 #Oh my zsh !
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
