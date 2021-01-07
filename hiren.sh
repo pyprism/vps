@@ -88,6 +88,7 @@ echo ":::::Create New User:::::"
 echo "Enter User Name=>"
 read username
 useradd -m $username
+mkhomedir_helper $username
 echo "user created"
 echo "Enter password for new user:"
 passwd $username
