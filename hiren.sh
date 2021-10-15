@@ -113,8 +113,10 @@ apt  install -y postgresql libpq-dev postgresql-contrib
 nisha "PostgreSQL Complete"
 
 #redis ! ? :D
-add-apt-repository ppa:chris-lea/redis-server -y
-apt install redis-server -y
+curl https://packages.redis.io/gpg | sudo apt-key add -
+echo "deb https://packages.redis.io/deb $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/redis.list
+apt update
+apt install redis -y
 nisha "Redis Complete"
 
 #docker.io
