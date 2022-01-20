@@ -165,6 +165,12 @@ chmod +x /usr/local/bin/ctop
 #timezone settings
 dpkg-reconfigure tzdata
 
+# Install btop
+cd /tmp
+wget -qO btop.tbz https://github.com/aristocratos/btop/releases/latest/download/btop-x86_64-linux-musl.tbz
+sudo tar xf btop.tbz -C /usr/local bin/btop
+
+
 git clone https://github.com/pyprism/vps.git
 git clone https://github.com/oussemos/fail2ban-dashboard.git
 
