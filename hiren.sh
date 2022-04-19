@@ -24,11 +24,11 @@ nisha "System Uptodate "
 #echo 'Dpkg::Progress-Fancy "1";' > /etc/apt/apt.conf.d/99progressbar
 
 # webupd8 ppa for youtube-dl
-add-apt-repository ppa:nilarimogard/webupd8 -y
-apt update
+#add-apt-repository ppa:nilarimogard/webupd8 -y
+#apt update
 
 #basic package installation
-apt-get install zsh ntp libffi-dev ncdu vnstat libpango1.0-0 youtube-dl letsencrypt finger htop python3-dev inxi axel fail2ban sendmail git nethogs unzip nmap imagemagick webp -y
+apt-get install software-properties-common zsh ntp libffi-dev ncdu vnstat libpango1.0-0 youtube-dl letsencrypt finger htop python3-dev inxi axel fail2ban sendmail git nethogs unzip nmap imagemagick webp -y
 nisha "Basic package installation complete"
 
 # puppeter
