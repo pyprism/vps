@@ -28,7 +28,7 @@ nisha "System Uptodate "
 #apt update
 
 #basic package installation
-apt-get install software-properties-common zsh ntp libffi-dev ncdu vnstat libpango1.0-0 youtube-dl letsencrypt finger htop python3-dev inxi axel fail2ban sendmail git nethogs unzip nmap imagemagick webp -y
+apt-get install curl software-properties-common zsh ntp libffi-dev ncdu vnstat libpango1.0-0 youtube-dl letsencrypt finger htop python3-dev inxi axel fail2ban sendmail git nethogs unzip nmap imagemagick webp -y
 nisha "Basic package installation complete"
 
 # puppeter
