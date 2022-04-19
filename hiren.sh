@@ -156,7 +156,7 @@ apt install python-certbot-nginx certbot
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 
 #zsh fish like autocomplete
-git clone git://github.com/zsh-users/zsh-autosuggestions $ZSH_CUSTOM/plugins/zsh-autosuggestions
+git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
 
 # CTOP
 wget https://github.com/bcicen/ctop/releases/download/v0.7.2/ctop-0.7.1-linux-amd64 -O /usr/local/bin/ctop
