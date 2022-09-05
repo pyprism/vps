@@ -92,6 +92,7 @@ mkhomedir_helper $username
 echo "user created"
 echo "Enter password for new user:"
 passwd $username
+usermod -a -G $username nginx  # fix for nginx 403 permission error
 usermod -a -G sudo $username
 
 #MariaD
@@ -179,4 +180,3 @@ git clone https://github.com/pyprism/vps.git
 git clone https://github.com/oussemos/fail2ban-dashboard.git
 
 nisha "All Done . Check If There Is Any Err. "
-
