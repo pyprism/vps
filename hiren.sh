@@ -175,6 +175,20 @@ cd /tmp
 wget -qO btop.tbz https://github.com/aristocratos/btop/releases/latest/download/btop-x86_64-linux-musl.tbz
 sudo tar xf btop.tbz -C /usr/local bin/btop
 
+# Crowdsec
+curl -s https://packagecloud.io/install/repositories/crowdsec/crowdsec/script.deb.sh | sudo bash
+apt  update
+apt install crowdsec
+cscli collections install crowdsecurity/whitelist-good-actors
+cscli collections install crowdsecurity/endlessh
+cscli collections install crowdsecurity/exchange
+cscli collections install crowdsecurity/iptables
+cscli collections install crowdsecurity/linux
+cscli collections install crowdsecurity/mssql
+cscli collections install crowdsecurity/nginx
+cscli collections install crowdsecurity/sshd
+systemctl reload crowdsec
+
 
 git clone https://github.com/pyprism/vps.git
 git clone https://github.com/oussemos/fail2ban-dashboard.git
