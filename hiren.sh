@@ -28,7 +28,7 @@ nisha "System Uptodate "
 #apt update
 
 #basic package installation
-apt-get install curl software-properties-common zsh ntp libffi-dev ncdu vnstat libpango1.0-0 youtube-dl letsencrypt finger htop python3-dev inxi axel fail2ban sendmail git nethogs unzip nmap imagemagick webp -y
+apt-get install btop curl software-properties-common zsh ntp libffi-dev ncdu vnstat libpango1.0-0 youtube-dl letsencrypt finger htop python3-dev inxi axel fail2ban sendmail git nethogs unzip nmap imagemagick webp -y
 nisha "Basic package installation complete"
 
 # puppeter
@@ -168,11 +168,6 @@ chmod +x /usr/local/bin/ctop
 
 #timezone settings
 dpkg-reconfigure tzdata
-
-# Install btop
-cd /tmp
-wget -qO btop.tbz https://github.com/aristocratos/btop/releases/latest/download/btop-x86_64-linux-musl.tbz
-sudo tar xf btop.tbz -C /usr/local bin/btop
 
 # Crowdsec
 curl -s https://packagecloud.io/install/repositories/crowdsec/crowdsec/script.deb.sh | sudo bash
