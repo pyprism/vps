@@ -1,0 +1,17 @@
+---
+- hosts: all
+  become: yes
+
+  vars_files:
+    - pg_vars.yaml
+
+  tasks:
+    - name: "Set timestamp of the backup"
+      set_fact:
+        now: "{{ lookup("pipe", "date +%F-%T") }}"
+    - name: "Create a backup directory"
+      file:
+        path: "/home/{{ user_app }}/db_backup/{{ app_name }}/{{ now }}/"
+        mode: 0777
+        owner: "{{ user_app }}"
+        state: directory
