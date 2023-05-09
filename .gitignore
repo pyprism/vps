@@ -1,0 +1,4 @@
+.idea/
+db_backup/postgresql/hosts
+db_backup/postgresql/pg_vars.yaml
+db_backup/postgresql/backups/*
