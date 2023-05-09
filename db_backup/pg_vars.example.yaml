@@ -1,7 +1,8 @@
 ---
 remote_user_name: prism
-project_name: app1
-db_name: db_name
+db_name:
+  - db_name1
+  - db_name2
 pg_password: *************
 pg_user: postgres
 pg_host: localhost
