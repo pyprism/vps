@@ -1,3 +1,4 @@
+# for this playbook, remote host must have acl package installed. ex: apt install acl
 ---
 - hosts: all
   become: yes
