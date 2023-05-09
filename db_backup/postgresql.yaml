@@ -1,17 +1,34 @@
 ---
 - hosts: all
   become: yes
+  become_flags: "-E"
+  become_user: "{{ remote_user_name }}"
+  gather_facts: no
 
   vars_files:
     - pg_vars.yaml
 
   tasks:
-    - name: "Set timestamp of the backup"
+    - name: "Set timestamp for the backup"
       set_fact:
-        now: "{{ lookup("pipe", "date +%F-%T") }}"
+        now: "{{ lookup('pipe', 'date +%F-%T') }}"
     - name: "Create a backup directory"
       file:
-        path: "/home/{{ user_app }}/db_backup/{{ app_name }}/{{ now }}/"
+        path: "/home/{{ remote_user_name }}/db_backup/{{ project_name }}/{{ now }}/"
         mode: 0777
-        owner: "{{ user_app }}"
+        owner: "{{ remote_user_name }}"
         state: directory
+    - name: "Back up the database"
+      postgresql_db:
+        state: dump
+        name: "{{ db_name }}"
+        login_host: "{{ pg_host }}"
+        login_user: "{{ pg_user }}"
+        login_password: "{{ pg_password }}"
+        target: "/home/{{ remote_user_name }}/db_backup/{{ project_name }}/{{ now }}/{{ db_name }}.dump.gz"
+
+    - name: "Fetch backup from the server"
+      fetch:
+        src: "/home/{{ remote_user_name }}/db_backup/{{ project_name }}/{{ now }}/{{ db_name }}.dump.gz"
+        dest: "backups/{{ now }}/{{ db_name }}.dump.gz"
+        flat: yes
