@@ -96,7 +96,7 @@ mkhomedir_helper $username
 echo "user created"
 echo "Enter password for new user:"
 passwd $username
-usermod -a -G $username nginx  # fix for nginx 403 permission error
+usermod -a -G $username www-data  # fix for nginx 403 permission error
 usermod -a -G sudo $username
 
 #MariaD
