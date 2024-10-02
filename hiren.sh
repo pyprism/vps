@@ -49,7 +49,7 @@ nisha "nodejs , nginx installation complete "
 
 
 #php
-#apt-get install  php7.0 php7.0-mbstring php7.0-pgsql php7.0-fpm php7.0-json php7.0-mcrypt php-geoip php7.0-gd php7.0-dev php7.0-curl php7.0-cli php7.0-mysql php7.0-bcmath php-bcmath -y
+#apt install -y php8.1-cli php8.1-common php8.1-mysql php8.1-zip php8.1-gd php8.1-mbstring php8.1-curl php8.1-xml php8.1-bcmath
 #nisha "Php Installed :/ "
 
 # php-mcrypt fix
