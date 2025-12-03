@@ -177,6 +177,7 @@ dpkg-reconfigure tzdata
 curl -s https://packagecloud.io/install/repositories/crowdsec/crowdsec/script.deb.sh | sudo bash
 apt  update
 apt install crowdsec
+apt install crowdsec-firewall-bouncer-nftables
 cscli collections install crowdsecurity/whitelist-good-actors
 cscli collections install crowdsecurity/endlessh
 cscli collections install crowdsecurity/exchange
