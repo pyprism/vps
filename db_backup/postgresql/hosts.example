@@ -1,2 +1,0 @@
-[hiren]
-ip ansible_user=prism ansible_connection=ssh ansible_ssh_pass=root_pass ansible_become_pass=prism_pass
