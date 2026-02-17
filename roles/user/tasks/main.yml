@@ -1,6 +1,37 @@
 ---
 # User role - Create new user with sudo access and install Homebrew
 
+# =============================================================================
+# ROOT USER CONFIGURATION
+# =============================================================================
+- name: Set root user shell to zsh
+  ansible.builtin.user:
+    name: root
+    shell: "{{ root_shell | default('/usr/bin/zsh') }}"
+  when: configure_root | default(true)
+
+- name: Create .ssh directory for root
+  ansible.builtin.file:
+    path: /root/.ssh
+    state: directory
+    owner: root
+    group: root
+    mode: '0700'
+  when: configure_root | default(true)
+
+- name: Add authorized keys for root user
+  ansible.builtin.authorized_key:
+    user: root
+    key: "{{ item }}"
+    state: present
+  loop: "{{ ssh_authorized_keys }}"
+  when:
+    - configure_root | default(true)
+    - ssh_authorized_keys | length > 0
+
+# =============================================================================
+# NEW USER CONFIGURATION
+# =============================================================================
 - name: Create new user
   ansible.builtin.user:
     name: "{{ new_username }}"

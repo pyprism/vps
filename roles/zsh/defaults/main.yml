@@ -1,3 +1,4 @@
 ---
 # Default variables for zsh role
+configure_root: true
 
