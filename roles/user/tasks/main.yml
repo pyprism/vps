@@ -1,0 +1,110 @@
+---
+# User role - Create new user with sudo access and install Homebrew
+
+- name: Create new user
+  ansible.builtin.user:
+    name: "{{ new_username }}"
+    password: "{{ new_user_password | password_hash('sha512') }}"
+    shell: "{{ new_user_shell }}"
+    groups:
+      - sudo
+    append: true
+    create_home: true
+    state: present
+
+- name: Add user to sudoers with NOPASSWD
+  ansible.builtin.lineinfile:
+    path: /etc/sudoers.d/{{ new_username }}
+    line: "{{ new_username }} ALL=(ALL) NOPASSWD:ALL"
+    create: true
+    mode: '0440'
+    validate: 'visudo -cf %s'
+
+- name: Create .ssh directory for new user
+  ansible.builtin.file:
+    path: "/home/{{ new_username }}/.ssh"
+    state: directory
+    owner: "{{ new_username }}"
+    group: "{{ new_username }}"
+    mode: '0700'
+
+- name: Add authorized keys for new user
+  ansible.builtin.authorized_key:
+    user: "{{ new_username }}"
+    key: "{{ item }}"
+    state: present
+  loop: "{{ ssh_authorized_keys }}"
+  when: ssh_authorized_keys | length > 0
+
+- name: Copy root authorized_keys to new user if no keys specified
+  ansible.builtin.copy:
+    src: /root/.ssh/authorized_keys
+    dest: "/home/{{ new_username }}/.ssh/authorized_keys"
+    owner: "{{ new_username }}"
+    group: "{{ new_username }}"
+    mode: '0600'
+    remote_src: true
+  when: ssh_authorized_keys | length == 0
+  ignore_errors: true
+
+- name: Install Homebrew dependencies
+  ansible.builtin.apt:
+    name:
+      - build-essential
+      - procps
+      - curl
+      - file
+      - git
+    state: present
+  when: install_homebrew | default(true)
+
+- name: Check if Homebrew is installed
+  ansible.builtin.stat:
+    path: "/home/{{ new_username }}/.linuxbrew/bin/brew"
+  register: homebrew_check
+  when: install_homebrew | default(true)
+
+- name: Check if Homebrew is installed in /home/linuxbrew
+  ansible.builtin.stat:
+    path: "/home/linuxbrew/.linuxbrew/bin/brew"
+  register: homebrew_check_global
+  when: install_homebrew | default(true)
+
+- name: Install Homebrew for user
+  become: true
+  become_user: "{{ new_username }}"
+  ansible.builtin.shell: |
+    NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  args:
+    creates: "/home/linuxbrew/.linuxbrew/bin/brew"
+  environment:
+    HOME: "/home/{{ new_username }}"
+  when:
+    - install_homebrew | default(true)
+    - not homebrew_check.stat.exists | default(false)
+    - not homebrew_check_global.stat.exists | default(false)
+
+- name: Add Homebrew to user's PATH in .bashrc
+  ansible.builtin.blockinfile:
+    path: "/home/{{ new_username }}/.bashrc"
+    block: |
+      # Homebrew
+      eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+    marker: "# {mark} ANSIBLE MANAGED BLOCK - HOMEBREW"
+    create: true
+    owner: "{{ new_username }}"
+    group: "{{ new_username }}"
+  when: install_homebrew | default(true)
+
+- name: Add Homebrew to user's PATH in .zshrc
+  ansible.builtin.blockinfile:
+    path: "/home/{{ new_username }}/.zshrc"
+    block: |
+      # Homebrew
+      eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+    marker: "# {mark} ANSIBLE MANAGED BLOCK - HOMEBREW"
+    create: true
+    owner: "{{ new_username }}"
+    group: "{{ new_username }}"
+  when: install_homebrew | default(true)
+

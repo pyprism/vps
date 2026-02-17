@@ -1,0 +1,5 @@
+---
+# Default variables for tailscale role
+tailscale_auth_key: ""
+tailscale_extra_args: ""
+

@@ -1,0 +1,5 @@
+---
+# Default variables for python role
+python_version: "3.12"
+python_dev_packages: true
+

@@ -1,0 +1,5 @@
+---
+# Default variables for database (MySQL/MariaDB) role
+mysql_root_password: "changeme"
+mysql_run_secure_installation: true
+

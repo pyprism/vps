@@ -1,0 +1,54 @@
+---
+# SSH Configuration
+
+- name: Install OpenSSH server
+  ansible.builtin.apt:
+    name: openssh-server
+    state: present
+
+- name: Configure SSH port
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^#?Port\s+'
+    line: "Port {{ ssh_port }}"
+    state: present
+  notify: Restart SSH
+
+- name: Configure SSH PermitRootLogin
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^#?PermitRootLogin\s+'
+    line: "PermitRootLogin {{ ssh_permit_root_login }}"
+    state: present
+  notify: Restart SSH
+
+- name: Configure SSH PasswordAuthentication
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^#?PasswordAuthentication\s+'
+    line: "PasswordAuthentication {{ 'yes' if ssh_password_authentication else 'no' }}"
+    state: present
+  notify: Restart SSH
+
+- name: Configure SSH PubkeyAuthentication
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^#?PubkeyAuthentication\s+'
+    line: "PubkeyAuthentication {{ 'yes' if ssh_pubkey_authentication else 'no' }}"
+    state: present
+  notify: Restart SSH
+
+- name: Disable empty passwords
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^#?PermitEmptyPasswords\s+'
+    line: "PermitEmptyPasswords no"
+    state: present
+  notify: Restart SSH
+
+- name: Ensure SSH service is enabled and running
+  ansible.builtin.systemd:
+    name: ssh
+    state: started
+    enabled: true
+

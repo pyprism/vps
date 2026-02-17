@@ -1,0 +1,10 @@
+---
+# Security role - Configure SSH and UFW firewall
+
+- name: Configure SSH
+  ansible.builtin.include_tasks: ssh.yml
+
+- name: Configure UFW firewall
+  ansible.builtin.include_tasks: ufw.yml
+  when: ufw_enabled | default(true)
+

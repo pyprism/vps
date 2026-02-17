@@ -1,0 +1,62 @@
+---
+# Database role - Install MySQL/MariaDB
+
+- name: Install MariaDB
+  ansible.builtin.apt:
+    name:
+      - mariadb-server
+      - mariadb-client
+      - python3-pymysql
+    state: present
+
+- name: Ensure MariaDB is enabled and running
+  ansible.builtin.systemd:
+    name: mariadb
+    state: started
+    enabled: true
+
+- name: Set MariaDB root password
+  community.mysql.mysql_user:
+    name: root
+    password: "{{ mysql_root_password }}"
+    host_all: true
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+    state: present
+  ignore_errors: true
+
+- name: Create .my.cnf for root
+  ansible.builtin.copy:
+    dest: /root/.my.cnf
+    content: |
+      [client]
+      user=root
+      password={{ mysql_root_password }}
+    mode: '0600'
+
+- name: Run mysql_secure_installation equivalent tasks
+  when: mysql_run_secure_installation | default(true)
+  block:
+    - name: Remove anonymous users
+      community.mysql.mysql_user:
+        name: ''
+        host_all: true
+        state: absent
+        login_unix_socket: /var/run/mysqld/mysqld.sock
+
+    - name: Remove test database
+      community.mysql.mysql_db:
+        name: test
+        state: absent
+        login_unix_socket: /var/run/mysqld/mysqld.sock
+
+    - name: Disallow remote root login
+      community.mysql.mysql_query:
+        login_unix_socket: /var/run/mysqld/mysqld.sock
+        query: DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1')
+      ignore_errors: true
+
+    - name: Flush privileges
+      community.mysql.mysql_query:
+        login_unix_socket: /var/run/mysqld/mysqld.sock
+        query: FLUSH PRIVILEGES
+

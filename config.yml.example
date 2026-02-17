@@ -1,0 +1,122 @@
+# =============================================================================
+# VPS Configuration File - EDIT THIS FILE BEFORE RUNNING ANSIBLE
+# =============================================================================
+# This is the ONLY file you need to edit to customize your VPS setup
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# TARGET SERVER CONFIGURATION
+# -----------------------------------------------------------------------------
+vps_host: "your-vps-ip-or-hostname"
+vps_ssh_port: 22
+ansible_user: "root"  # Initial SSH user (usually root for first setup)
+
+# -----------------------------------------------------------------------------
+# NEW USER CONFIGURATION
+# -----------------------------------------------------------------------------
+create_user: true
+new_username: "deploy"
+new_user_password: "change_me_to_secure_password"  # Will be hashed automatically
+new_user_shell: "/usr/bin/zsh"
+new_user_groups:
+  - sudo
+  - docker
+
+# -----------------------------------------------------------------------------
+# SSH CONFIGURATION
+# -----------------------------------------------------------------------------
+ssh_port: 22  # Change this if you want a non-standard SSH port
+ssh_permit_root_login: "prohibit-password"  # Options: yes, no, prohibit-password
+ssh_password_authentication: false
+ssh_pubkey_authentication: true
+ssh_authorized_keys: []
+  # - "ssh-rsa AAAAB3... your-key-comment"
+  # - "ssh-ed25519 AAAAC3... another-key"
+
+# -----------------------------------------------------------------------------
+# FIREWALL (UFW) CONFIGURATION
+# -----------------------------------------------------------------------------
+ufw_enabled: true
+ufw_default_incoming: "deny"
+ufw_default_outgoing: "allow"
+ufw_allowed_ports:
+  - { port: "{{ ssh_port }}", proto: "tcp", comment: "SSH" }
+  - { port: "80", proto: "tcp", comment: "HTTP" }
+  - { port: "443", proto: "tcp", comment: "HTTPS" }
+  # Add more ports as needed:
+  # - { port: "5432", proto: "tcp", comment: "PostgreSQL" }
+  # - { port: "6379", proto: "tcp", comment: "Redis" }
+
+# -----------------------------------------------------------------------------
+# TIMEZONE CONFIGURATION
+# -----------------------------------------------------------------------------
+timezone: "Asia/Dhaka"
+
+# -----------------------------------------------------------------------------
+# INSTALLATION FLAGS - Enable/Disable Components
+# -----------------------------------------------------------------------------
+install_common_packages: true
+install_nodejs: true
+install_nginx: true
+install_python: true
+install_postgresql: true
+install_redis: true
+install_docker: true
+install_zsh: true
+install_crowdsec: true
+install_tailscale: true
+install_homebrew: true  # Linuxbrew for the new user
+
+# MySQL/MariaDB Configuration
+install_mysql: false  # Set to true to install MySQL/MariaDB
+mysql_root_password: "change_me_mysql_root_password"
+mysql_run_secure_installation: true
+
+# -----------------------------------------------------------------------------
+# PYTHON CONFIGURATION
+# -----------------------------------------------------------------------------
+python_version: "3.14"
+python_dev_packages: true
+
+# -----------------------------------------------------------------------------
+# NODEJS CONFIGURATION
+# -----------------------------------------------------------------------------
+nodejs_version: "20"  # LTS version
+
+# -----------------------------------------------------------------------------
+# POSTGRESQL CONFIGURATION
+# -----------------------------------------------------------------------------
+postgresql_version: "16"
+
+# -----------------------------------------------------------------------------
+# NGINX CONFIGURATION
+# -----------------------------------------------------------------------------
+nginx_generate_dhparam: true
+nginx_dhparam_size: 4096  # Use 2048 for faster generation during testing
+
+# -----------------------------------------------------------------------------
+# TAILSCALE CONFIGURATION
+# -----------------------------------------------------------------------------
+tailscale_auth_key: ""  # Optional: Pre-auth key for automatic registration
+tailscale_extra_args: ""  # Optional: Extra arguments for tailscale up
+
+# -----------------------------------------------------------------------------
+# VNC CONFIGURATION (Used with vnc.yml playbook)
+# -----------------------------------------------------------------------------
+vnc_enabled: false
+vnc_user: "{{ new_username }}"
+vnc_password: "change_me_vnc_password"
+vnc_display: ":1"
+vnc_resolution: "1920x1080"
+vnc_color_depth: 24
+
+# -----------------------------------------------------------------------------
+# CROWDSEC CONFIGURATION
+# -----------------------------------------------------------------------------
+crowdsec_collections:
+  - crowdsecurity/whitelist-good-actors
+  - crowdsecurity/linux
+  - crowdsecurity/nginx
+  - crowdsecurity/sshd
+  - crowdsecurity/iptables
+

@@ -1,0 +1,10 @@
+---
+# Default variables for user role
+new_username: "deploy"
+new_user_password: "changeme"
+new_user_shell: "/usr/bin/zsh"
+new_user_groups:
+  - sudo
+ssh_authorized_keys: []
+install_homebrew: true
+

@@ -1,0 +1,63 @@
+---
+# Zsh role - Install and configure Zsh with Oh My Zsh
+
+- name: Install Zsh
+  ansible.builtin.apt:
+    name: zsh
+    state: present
+
+- name: Check if Oh My Zsh is installed for user
+  ansible.builtin.stat:
+    path: "/home/{{ new_username }}/.oh-my-zsh"
+  register: ohmyzsh_check
+  when: create_user | default(true)
+
+- name: Install Oh My Zsh for user
+  become: true
+  become_user: "{{ new_username }}"
+  ansible.builtin.shell: |
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+  args:
+    creates: "/home/{{ new_username }}/.oh-my-zsh"
+  when:
+    - create_user | default(true)
+    - not ohmyzsh_check.stat.exists | default(false)
+
+- name: Set Zsh as default shell for user
+  ansible.builtin.user:
+    name: "{{ new_username }}"
+    shell: /usr/bin/zsh
+  when: create_user | default(true)
+
+- name: Install zsh-autosuggestions plugin
+  ansible.builtin.git:
+    repo: https://github.com/zsh-users/zsh-autosuggestions.git
+    dest: "/home/{{ new_username }}/.oh-my-zsh/custom/plugins/zsh-autosuggestions"
+    depth: 1
+    update: false
+  become: true
+  become_user: "{{ new_username }}"
+  when: create_user | default(true)
+  ignore_errors: true
+
+- name: Install zsh-syntax-highlighting plugin
+  ansible.builtin.git:
+    repo: https://github.com/zsh-users/zsh-syntax-highlighting.git
+    dest: "/home/{{ new_username }}/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting"
+    depth: 1
+    update: false
+  become: true
+  become_user: "{{ new_username }}"
+  when: create_user | default(true)
+  ignore_errors: true
+
+- name: Configure .zshrc plugins
+  ansible.builtin.lineinfile:
+    path: "/home/{{ new_username }}/.zshrc"
+    regexp: '^plugins=\('
+    line: 'plugins=(git zsh-autosuggestions zsh-syntax-highlighting docker docker-compose)'
+    create: true
+    owner: "{{ new_username }}"
+    group: "{{ new_username }}"
+  when: create_user | default(true)
+

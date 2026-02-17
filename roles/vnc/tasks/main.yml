@@ -1,0 +1,97 @@
+---
+# VNC role - Install TightVNC with LXDE desktop environment
+
+- name: Install LXDE and VNC dependencies
+  ansible.builtin.apt:
+    name:
+      - xorg
+      - lxde-core
+      - tightvncserver
+      - firefox-esr
+      - lxterminal
+      - dbus-x11
+    state: present
+    install_recommends: false
+
+- name: Create VNC directory for user
+  ansible.builtin.file:
+    path: "/home/{{ vnc_user }}/.vnc"
+    state: directory
+    owner: "{{ vnc_user }}"
+    group: "{{ vnc_user }}"
+    mode: '0755'
+
+- name: Set VNC password
+  become: true
+  become_user: "{{ vnc_user }}"
+  ansible.builtin.shell: |
+    echo "{{ vnc_password }}" | vncpasswd -f > ~/.vnc/passwd
+    chmod 600 ~/.vnc/passwd
+  args:
+    creates: "/home/{{ vnc_user }}/.vnc/passwd"
+
+- name: Create VNC xstartup script
+  ansible.builtin.copy:
+    dest: "/home/{{ vnc_user }}/.vnc/xstartup"
+    content: |
+      #!/bin/bash
+      xrdb $HOME/.Xresources
+      xsetroot -solid grey
+      export XKL_XMODMAP_DISABLE=1
+      /usr/bin/lxterminal &
+      /usr/bin/lxsession -s LXDE &
+    owner: "{{ vnc_user }}"
+    group: "{{ vnc_user }}"
+    mode: '0755'
+
+- name: Create VNC systemd service
+  ansible.builtin.copy:
+    dest: /etc/systemd/system/vncserver@.service
+    content: |
+      [Unit]
+      Description=TightVNC server on display %i
+      After=syslog.target network.target
+
+      [Service]
+      Type=forking
+      User={{ vnc_user }}
+      Group={{ vnc_user }}
+      WorkingDirectory=/home/{{ vnc_user }}
+      
+      ExecStartPre=-/usr/bin/tightvncserver -kill %i > /dev/null 2>&1
+      ExecStart=/usr/bin/tightvncserver %i -geometry {{ vnc_resolution }} -depth {{ vnc_color_depth }}
+      ExecStop=/usr/bin/tightvncserver -kill %i
+      
+      [Install]
+      WantedBy=multi-user.target
+    mode: '0644'
+  notify: Reload systemd
+
+- name: Enable and start VNC service
+  ansible.builtin.systemd:
+    name: "vncserver@{{ vnc_display }}"
+    state: started
+    enabled: true
+    daemon_reload: true
+
+- name: Display VNC connection instructions
+  ansible.builtin.debug:
+    msg: |
+      ============================================
+      VNC Server Installed!
+      ============================================
+      
+      To connect securely via SSH tunnel:
+      
+      1. From your local machine, create SSH tunnel:
+         ssh -L 5901:localhost:5901 {{ vnc_user }}@{{ inventory_hostname }} -p {{ ssh_port }}
+      
+      2. Connect with your VNC client to:
+         localhost:5901
+      
+      VNC Password: {{ vnc_password }}
+      
+      Note: The VNC server listens only on localhost for security.
+      Always use SSH tunneling to connect.
+      ============================================
+

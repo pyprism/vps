@@ -1,0 +1,50 @@
+---
+# PostgreSQL role - Install PostgreSQL
+
+- name: Install PostgreSQL prerequisites
+  ansible.builtin.apt:
+    name:
+      - curl
+      - ca-certificates
+      - gnupg
+    state: present
+
+- name: Create keyrings directory
+  ansible.builtin.file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: '0755'
+
+- name: Add PostgreSQL GPG key
+  ansible.builtin.get_url:
+    url: https://www.postgresql.org/media/keys/ACCC4CF8.asc
+    dest: /etc/apt/keyrings/postgresql.asc
+    mode: '0644'
+
+- name: Add PostgreSQL repository
+  ansible.builtin.apt_repository:
+    repo: "deb [signed-by=/etc/apt/keyrings/postgresql.asc] https://apt.postgresql.org/pub/repos/apt {{ ansible_facts['distribution_release'] }}-pgdg main"
+    state: present
+    filename: pgdg
+    update_cache: false
+
+- name: Update apt cache
+  ansible.builtin.raw: apt-get update -o APT::Update::Post-Invoke-Success="" -qq
+  changed_when: false
+
+- name: Install PostgreSQL packages
+  ansible.builtin.apt:
+    name:
+      - "postgresql-{{ postgresql_version }}"
+      - "postgresql-contrib-{{ postgresql_version }}"
+      - libpq-dev
+      - python3-psycopg2
+    state: present
+    update_cache: false
+
+- name: Ensure PostgreSQL is enabled and running
+  ansible.builtin.systemd:
+    name: postgresql
+    state: started
+    enabled: true
+

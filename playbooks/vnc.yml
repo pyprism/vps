@@ -1,0 +1,19 @@
+---
+# =============================================================================
+# VNC + LXDE Desktop Environment Playbook
+# =============================================================================
+# This playbook installs LXDE desktop with TightVNC server
+# Usage: ./run.sh vnc
+# =============================================================================
+
+- name: Install VNC with LXDE Desktop
+  hosts: vps
+  become: true
+  vars_files:
+    - ../config.yml
+
+  tasks:
+    - name: Include VNC role
+      ansible.builtin.include_role:
+        name: vnc
+

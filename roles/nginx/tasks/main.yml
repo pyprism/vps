@@ -1,0 +1,61 @@
+---
+# Nginx role - Install and configure Nginx
+
+- name: Install Nginx
+  ansible.builtin.apt:
+    name: nginx
+    state: present
+
+- name: Ensure Nginx directories exist
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+  loop:
+    - /etc/nginx/sites-available
+    - /etc/nginx/sites-enabled
+    - /etc/nginx/snippets
+    - /var/www/html
+
+- name: Check if DH parameters exist
+  ansible.builtin.stat:
+    path: /etc/nginx/dhparam.pem
+  register: dhparam_file
+
+- name: Generate DH parameters (only if not exists - this takes a while)
+  community.crypto.openssl_dhparam:
+    path: /etc/nginx/dhparam.pem
+    size: "{{ nginx_dhparam_size }}"
+    mode: '0600'
+  when:
+    - nginx_generate_dhparam | default(true)
+    - not dhparam_file.stat.exists
+  async: 3600
+  poll: 10
+
+- name: Create SSL snippet
+  ansible.builtin.copy:
+    dest: /etc/nginx/snippets/ssl-params.conf
+    content: |
+      ssl_protocols TLSv1.2 TLSv1.3;
+      ssl_prefer_server_ciphers off;
+      ssl_ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384;
+      ssl_session_timeout 1d;
+      ssl_session_cache shared:SSL:50m;
+      ssl_session_tickets off;
+      ssl_stapling on;
+      ssl_stapling_verify on;
+      resolver 8.8.8.8 8.8.4.4 valid=300s;
+      resolver_timeout 5s;
+      add_header X-Frame-Options SAMEORIGIN;
+      add_header X-Content-Type-Options nosniff;
+      add_header X-XSS-Protection "1; mode=block";
+    mode: '0644'
+  notify: Reload Nginx
+
+- name: Ensure Nginx is enabled and running
+  ansible.builtin.systemd:
+    name: nginx
+    state: started
+    enabled: true
+

@@ -1,0 +1,4 @@
+---
+# Default variables for postgresql role
+postgresql_version: "16"
+

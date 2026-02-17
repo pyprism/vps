@@ -1,0 +1,73 @@
+---
+# Python role - Install Python and pip
+
+- name: Install Python prerequisites
+  ansible.builtin.apt:
+    name:
+      - software-properties-common
+      - gpg
+    state: present
+
+- name: Create keyrings directory
+  ansible.builtin.file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: '0755'
+  when: ansible_facts["distribution"] == "Ubuntu"
+
+- name: Download deadsnakes GPG key
+  ansible.builtin.get_url:
+    url: https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xF23C5A6CF475977595C89F51BA6932366A755776
+    dest: /etc/apt/keyrings/deadsnakes.asc
+    mode: '0644'
+  when: ansible_facts["distribution"] == "Ubuntu"
+
+- name: Add deadsnakes PPA for Python (modern way)
+  ansible.builtin.apt_repository:
+    repo: "deb [signed-by=/etc/apt/keyrings/deadsnakes.asc] https://ppa.launchpadcontent.net/deadsnakes/ppa/ubuntu {{ ansible_facts['distribution_release'] }} main"
+    state: present
+    filename: deadsnakes
+    update_cache: false
+  when: ansible_facts["distribution"] == "Ubuntu"
+
+- name: Remove legacy deadsnakes PPA if exists
+  ansible.builtin.apt_repository:
+    repo: ppa:deadsnakes/ppa
+    state: absent
+  when: ansible_facts["distribution"] == "Ubuntu"
+  ignore_errors: true
+
+- name: Update apt cache after adding repositories
+  ansible.builtin.raw: apt-get update -o APT::Update::Post-Invoke-Success="" -qq
+  changed_when: false
+
+- name: Install Python packages
+  ansible.builtin.apt:
+    name:
+      - "python{{ python_version }}"
+      - "python{{ python_version }}-venv"
+      - python3-pip
+      - python3-setuptools
+      - python3-wheel
+    state: present
+  ignore_errors: true
+
+- name: Install Python dev packages
+  ansible.builtin.apt:
+    name:
+      - "python{{ python_version }}-dev"
+      - python3-dev
+      - libffi-dev
+      - libssl-dev
+    state: present
+  when: python_dev_packages | default(true)
+  ignore_errors: true
+
+- name: Set Python alternative
+  community.general.alternatives:
+    name: python3
+    link: /usr/bin/python3
+    path: "/usr/bin/python{{ python_version }}"
+    priority: 1
+  ignore_errors: true
+

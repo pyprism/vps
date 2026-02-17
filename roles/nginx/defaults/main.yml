@@ -1,0 +1,5 @@
+---
+# Default variables for nginx role
+nginx_generate_dhparam: true
+nginx_dhparam_size: 2048
+
