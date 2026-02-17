@@ -1,1 +1,4 @@
 .idea/
+config.yml
+inventory
+.DS_Store
