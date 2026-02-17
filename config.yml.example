@@ -29,7 +29,7 @@ ssh_port: 22  # Change this if you want a non-standard SSH port
 ssh_permit_root_login: "prohibit-password"  # Options: yes, no, prohibit-password
 ssh_password_authentication: false
 ssh_pubkey_authentication: true
-ssh_authorized_keys: []
+ssh_authorized_keys: []  # remove the empty list and add your public keys here
   # - "ssh-rsa AAAAB3... your-key-comment"
   # - "ssh-ed25519 AAAAC3... another-key"
 
