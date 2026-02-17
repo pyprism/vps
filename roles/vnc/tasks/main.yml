@@ -7,7 +7,7 @@
       - xorg
       - lxde-core
       - tightvncserver
-      - firefox-esr
+      - firefox
       - lxterminal
       - dbus-x11
     state: present
