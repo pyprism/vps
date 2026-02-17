@@ -1,0 +1,116 @@
+---
+# =============================================================================
+# Main VPS Setup Playbook
+# =============================================================================
+# This playbook sets up a fresh Debian/Ubuntu VPS with all core components
+# Usage: ./run.sh setup
+# =============================================================================
+
+- name: VPS Initial Setup
+  hosts: vps
+  become: true
+  vars_files:
+    - ../config.yml
+
+  pre_tasks:
+    - name: Verify Debian/Ubuntu based system
+      ansible.builtin.assert:
+        that:
+          - ansible_facts["os_family"] == "Debian"
+        fail_msg: "This playbook only supports Debian/Ubuntu based systems"
+        success_msg: "Detected {{ ansible_facts['distribution'] }} {{ ansible_facts['distribution_version'] }}"
+
+    - name: Fix broken apt and Python environment
+      ansible.builtin.raw: |
+        export DEBIAN_FRONTEND=noninteractive
+        # Remove ALL deadsnakes PPA related files from ALL locations
+        rm -f /etc/apt/sources.list.d/*deadsnakes* 2>/dev/null || true
+        rm -f /etc/apt/sources.list.d/*ppa* 2>/dev/null || true
+        rm -f /etc/apt/trusted.gpg 2>/dev/null || true
+        rm -f /etc/apt/trusted.gpg.d/*deadsnakes* 2>/dev/null || true
+        # Also check and remove from sources.list
+        sed -i '/deadsnakes/d' /etc/apt/sources.list 2>/dev/null || true
+        sed -i '/ppa.launchpad/d' /etc/apt/sources.list 2>/dev/null || true
+        # Fix cnf-update-db by reinstalling command-not-found with correct python
+        apt-get update -o APT::Update::Post-Invoke-Success="" -qq 2>/dev/null || true
+        apt-get install --reinstall -y command-not-found python3-commandnotfound 2>/dev/null || true
+        # Ensure Python 3.12 apt bindings work
+        apt-get install --reinstall -y python3-apt 2>/dev/null || true
+        # Update apt one more time to verify it works
+        apt-get update -qq 2>/dev/null || true
+      changed_when: false
+
+    - name: Update apt cache
+      ansible.builtin.apt:
+        update_cache: true
+        cache_valid_time: 3600
+      ignore_errors: true
+
+  roles:
+    - role: common
+      when: install_common_packages | default(true)
+
+    - role: security
+      when: ufw_enabled | default(true)
+
+    - role: user
+      when: create_user | default(true)
+
+    - role: zsh
+      when: install_zsh | default(true)
+
+    - role: docker
+      when: install_docker | default(true)
+
+    - role: nodejs
+      when: install_nodejs | default(true)
+
+    - role: python
+      when: install_python | default(true)
+
+    - role: nginx
+      when: install_nginx | default(true)
+
+    - role: postgresql
+      when: install_postgresql | default(true)
+
+    - role: redis
+      when: install_redis | default(true)
+
+    - role: database
+      when: install_mysql | default(false)
+
+    - role: crowdsec
+      when: install_crowdsec | default(true)
+
+    - role: tailscale
+      when: install_tailscale | default(true)
+
+  post_tasks:
+    - name: Display setup completion summary
+      ansible.builtin.debug:
+        msg: |
+          ============================================
+          VPS Setup Complete!
+          ============================================
+          Username: {{ new_username }}
+          SSH Port: {{ ssh_port }}
+          
+          Installed Components:
+          - Common packages: {{ install_common_packages | default(true) }}
+          - Docker: {{ install_docker | default(true) }}
+          - Node.js: {{ install_nodejs | default(true) }}
+          - Python: {{ install_python | default(true) }}
+          - Nginx: {{ install_nginx | default(true) }}
+          - PostgreSQL: {{ install_postgresql | default(true) }}
+          - Redis: {{ install_redis | default(true) }}
+          - MySQL: {{ install_mysql | default(false) }}
+          - Zsh: {{ install_zsh | default(true) }}
+          - CrowdSec: {{ install_crowdsec | default(true) }}
+          - Tailscale: {{ install_tailscale | default(true) }}
+          
+          Next steps:
+          1. SSH with: ssh {{ new_username }}@{{ inventory_hostname }} -p {{ ssh_port }}
+          2. For VNC setup: ./run.sh vnc
+          ============================================
+

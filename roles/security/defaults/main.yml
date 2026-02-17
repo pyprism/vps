@@ -1,0 +1,13 @@
+---
+# Default variables for security role
+ssh_port: 22
+ssh_permit_root_login: "prohibit-password"
+ssh_password_authentication: false
+ssh_pubkey_authentication: true
+
+ufw_enabled: true
+ufw_default_incoming: "deny"
+ufw_default_outgoing: "allow"
+ufw_allowed_ports:
+  - { port: "22", proto: "tcp", comment: "SSH" }
+

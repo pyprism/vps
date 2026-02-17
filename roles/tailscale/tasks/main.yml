@@ -1,0 +1,71 @@
+---
+# Tailscale role - Install and configure Tailscale VPN
+
+- name: Install Tailscale prerequisites
+  ansible.builtin.apt:
+    name:
+      - curl
+      - gnupg
+    state: present
+
+- name: Create keyrings directory
+  ansible.builtin.file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: '0755'
+
+- name: Add Tailscale GPG key
+  ansible.builtin.get_url:
+    url: https://pkgs.tailscale.com/stable/{{ ansible_facts["distribution"] | lower }}/{{ ansible_facts["distribution_release"] }}.noarmor.gpg
+    dest: /etc/apt/keyrings/tailscale.gpg
+    mode: '0644'
+
+- name: Add Tailscale repository
+  ansible.builtin.apt_repository:
+    repo: "deb [signed-by=/etc/apt/keyrings/tailscale.gpg] https://pkgs.tailscale.com/stable/{{ ansible_facts['distribution'] | lower }} {{ ansible_facts['distribution_release'] }} main"
+    state: present
+    filename: tailscale
+    update_cache: false
+
+- name: Update apt cache for Tailscale
+  ansible.builtin.raw: apt-get update -o APT::Update::Post-Invoke-Success="" -qq
+  changed_when: false
+
+- name: Install Tailscale
+  ansible.builtin.apt:
+    name: tailscale
+    state: present
+    update_cache: false
+
+- name: Enable Tailscale service
+  ansible.builtin.systemd:
+    name: tailscaled
+    state: started
+    enabled: true
+
+- name: Check Tailscale status
+  ansible.builtin.command:
+    cmd: tailscale status
+  register: tailscale_status
+  changed_when: false
+  failed_when: false
+
+- name: Authenticate Tailscale with auth key
+  ansible.builtin.command:
+    cmd: "tailscale up --authkey={{ tailscale_auth_key }} {{ tailscale_extra_args }}"
+  when:
+    - tailscale_auth_key | length > 0
+    - "'Tailscale is stopped' in tailscale_status.stdout or tailscale_status.rc != 0"
+  register: tailscale_up
+  changed_when: tailscale_up.rc == 0
+  failed_when: false
+
+- name: Display Tailscale authentication instructions
+  ansible.builtin.debug:
+    msg: |
+      Tailscale installed! To authenticate, SSH to the server and run:
+        sudo tailscale up
+      
+      Then visit the URL shown to authenticate with your Tailscale account.
+  when: tailscale_auth_key | length == 0
+

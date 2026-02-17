@@ -1,0 +1,21 @@
+---
+# Redis role - Install Redis
+
+- name: Install Redis
+  ansible.builtin.apt:
+    name: redis-server
+    state: present
+
+- name: Configure Redis to listen on localhost only
+  ansible.builtin.lineinfile:
+    path: /etc/redis/redis.conf
+    regexp: '^bind '
+    line: 'bind 127.0.0.1 ::1'
+  notify: Restart Redis
+
+- name: Ensure Redis is enabled and running
+  ansible.builtin.systemd:
+    name: redis-server
+    state: started
+    enabled: true
+

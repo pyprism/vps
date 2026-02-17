@@ -1,0 +1,18 @@
+---
+# =============================================================================
+# Tailscale Installation Playbook
+# =============================================================================
+# Usage: ./run.sh tailscale
+# =============================================================================
+
+- name: Install Tailscale VPN
+  hosts: vps
+  become: true
+  vars_files:
+    - ../config.yml
+
+  tasks:
+    - name: Include Tailscale role
+      ansible.builtin.include_role:
+        name: tailscale
+

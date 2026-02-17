@@ -1,0 +1,4 @@
+---
+# Default variables for nodejs role
+nodejs_version: "20"
+

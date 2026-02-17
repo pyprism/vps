@@ -1,0 +1,8 @@
+---
+# Default variables for VNC role
+vnc_user: "{{ new_username | default('deploy') }}"
+vnc_password: "changeme"
+vnc_display: ":1"
+vnc_resolution: "1920x1080"
+vnc_color_depth: 24
+

@@ -1,0 +1,80 @@
+---
+# Common role - Install essential packages and configure system basics
+
+- name: Set timezone
+  community.general.timezone:
+    name: "{{ timezone }}"
+
+- name: Check if legacy trusted.gpg exists
+  ansible.builtin.stat:
+    path: /etc/apt/trusted.gpg
+  register: legacy_gpg_file
+
+- name: Remove legacy deadsnakes PPA if exists (fix GPG key issue)
+  ansible.builtin.apt_repository:
+    repo: ppa:deadsnakes/ppa
+    state: absent
+  when: legacy_gpg_file.stat.exists
+  ignore_errors: true
+
+- name: Remove legacy trusted.gpg keys causing issues
+  ansible.builtin.file:
+    path: /etc/apt/trusted.gpg
+    state: absent
+  when: legacy_gpg_file.stat.exists
+  ignore_errors: true
+
+- name: Install essential packages
+  ansible.builtin.apt:
+    name:
+      - apt-transport-https
+      - build-essential
+      - ca-certificates
+      - curl
+      - dirmngr
+      - git
+      - gnupg
+      - gpg
+      - htop
+      - btop
+      - jq
+      - libffi-dev
+      - libssl-dev
+      - lsb-release
+      - nano
+      - ncdu
+      - net-tools
+      - procps
+      - rsync
+      - software-properties-common
+      - sudo
+      - tar
+      - tree
+      - unzip
+      - vim
+      - wget
+      - zip
+    state: present
+    update_cache: false
+
+- name: Set system locale
+  ansible.builtin.locale_gen:
+    name: en_US.UTF-8
+    state: present
+
+- name: Update apt cache before upgrade
+  ansible.builtin.raw: apt-get update -o APT::Update::Post-Invoke-Success="" -qq
+  changed_when: false
+  when: upgrade_packages | default(false)
+
+- name: Update all packages to latest version
+  ansible.builtin.apt:
+    upgrade: safe
+    update_cache: false
+  when: upgrade_packages | default(false)
+
+- name: Remove unnecessary packages
+  ansible.builtin.apt:
+    autoremove: true
+    autoclean: true
+

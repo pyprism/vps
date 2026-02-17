@@ -1,0 +1,5 @@
+---
+# Default variables for common role
+timezone: "UTC"
+upgrade_packages: false
+

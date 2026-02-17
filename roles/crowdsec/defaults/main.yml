@@ -1,0 +1,6 @@
+---
+# Default variables for crowdsec role
+crowdsec_collections:
+  - crowdsecurity/linux
+  - crowdsecurity/sshd
+
