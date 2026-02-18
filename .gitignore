@@ -2,3 +2,5 @@
 config.yml
 inventory
 .DS_Store
+backup/
+

@@ -1,0 +1,196 @@
+---
+# =============================================================================
+# Database Backup Playbook
+# =============================================================================
+# This playbook backs up all databases from MySQL/MariaDB and PostgreSQL
+# to your local machine in a dated backup directory
+# Usage: ./run.sh backup
+# =============================================================================
+
+- name: Prepare localhost for backup
+  hosts: local
+  gather_facts: true
+  become: false
+
+  tasks:
+    - name: Get current timestamp
+      ansible.builtin.set_fact:
+        backup_date: "{{ ansible_facts['date_time']['date'] }}"
+        local_backup_base_dir: "{{ playbook_dir }}/../backup"
+
+    - name: Store backup date for remote hosts
+      ansible.builtin.add_host:
+        name: backup_coordinator
+        backup_date: "{{ backup_date }}"
+        local_backup_dir: "{{ playbook_dir }}/../backup/{{ backup_date }}"
+
+    - name: Create local backup directory
+      ansible.builtin.file:
+        path: "{{ playbook_dir }}/../backup/{{ backup_date }}"
+        state: directory
+        mode: '0755'
+
+- name: Backup Databases
+  hosts: vps
+  become: true
+  vars_files:
+    - ../config.yml
+
+  tasks:
+    # =============================================================================
+    # GATHER FACTS FOR TIMESTAMP
+    # =============================================================================
+    - name: Gather facts for timestamp
+      ansible.builtin.setup:
+        gather_subset:
+          - date_time
+
+    - name: Set backup timestamp variables
+      ansible.builtin.set_fact:
+        backup_date: "{{ ansible_facts['date_time']['date'] }}"
+        backup_time: "{{ ansible_facts['date_time']['hour'] }}{{ ansible_facts['date_time']['minute'] }}{{ ansible_facts['date_time']['second'] }}"
+        backup_timestamp: "{{ ansible_facts['date_time']['date'] }}_{{ ansible_facts['date_time']['hour'] }}{{ ansible_facts['date_time']['minute'] }}{{ ansible_facts['date_time']['second'] }}"
+        remote_backup_dir: "/tmp/db_backup_{{ ansible_facts['date_time']['date'] }}_{{ ansible_facts['date_time']['hour'] }}{{ ansible_facts['date_time']['minute'] }}{{ ansible_facts['date_time']['second'] }}"
+        local_backup_dir: "{{ hostvars['backup_coordinator']['local_backup_dir'] }}"
+
+    # =============================================================================
+    # PREPARATION
+    # =============================================================================
+    - name: Create remote backup directory
+      ansible.builtin.file:
+        path: "{{ remote_backup_dir }}"
+        state: directory
+        mode: '0700'
+
+
+    # =============================================================================
+    # MYSQL/MARIADB BACKUP
+    # =============================================================================
+    - name: Check if MySQL/MariaDB is installed
+      ansible.builtin.systemd:
+        name: mariadb
+      register: mariadb_service
+      ignore_errors: true
+
+    - name: Get list of MySQL databases
+      ansible.builtin.shell: |
+        mysql -e "SHOW DATABASES;" | grep -Ev "^(Database|information_schema|performance_schema|mysql|sys)$"
+      register: mysql_databases
+      when: mariadb_service.status is defined and mariadb_service.status.ActiveState == "active"
+      ignore_errors: true
+      changed_when: false
+
+    - name: Backup MySQL databases
+      ansible.builtin.shell: |
+        mysqldump --single-transaction --routines --triggers "{{ item }}" | gzip > "{{ remote_backup_dir }}/mysql_{{ item }}_{{ backup_timestamp }}.sql.gz"
+      loop: "{{ mysql_databases.stdout_lines | default([]) }}"
+      when:
+        - mariadb_service.status is defined
+        - mariadb_service.status.ActiveState == "active"
+        - mysql_databases.stdout_lines is defined
+        - mysql_databases.stdout_lines | length > 0
+      no_log: false
+
+    - name: Display MySQL backup info
+      ansible.builtin.debug:
+        msg: "Backed up {{ mysql_databases.stdout_lines | default([]) | length }} MySQL database(s)"
+      when:
+        - mariadb_service.status is defined
+        - mariadb_service.status.ActiveState == "active"
+
+    # =============================================================================
+    # POSTGRESQL BACKUP
+    # =============================================================================
+    - name: Check if PostgreSQL is installed
+      ansible.builtin.systemd:
+        name: postgresql
+      register: postgresql_service
+      ignore_errors: true
+
+    - name: Get list of PostgreSQL databases
+      become: true
+      become_user: postgres
+      ansible.builtin.shell: |
+        psql -t -c "SELECT datname FROM pg_database WHERE datistemplate = false AND datname != 'postgres';"
+      register: postgresql_databases
+      when: postgresql_service.status is defined and postgresql_service.status.ActiveState == "active"
+      ignore_errors: true
+      changed_when: false
+
+    - name: Backup PostgreSQL databases
+      become: true
+      become_user: postgres
+      ansible.builtin.shell: |
+        pg_dump "{{ item | trim }}" | gzip > "{{ remote_backup_dir }}/postgresql_{{ item | trim }}_{{ backup_timestamp }}.sql.gz"
+      loop: "{{ postgresql_databases.stdout_lines | default([]) }}"
+      when:
+        - postgresql_service.status is defined
+        - postgresql_service.status.ActiveState == "active"
+        - postgresql_databases.stdout_lines is defined
+        - postgresql_databases.stdout_lines | length > 0
+        - item | trim | length > 0
+      no_log: false
+
+    - name: Display PostgreSQL backup info
+      ansible.builtin.debug:
+        msg: "Backed up {{ postgresql_databases.stdout_lines | default([]) | select('trim') | select() | list | length }} PostgreSQL database(s)"
+      when:
+        - postgresql_service.status is defined
+        - postgresql_service.status.ActiveState == "active"
+
+    # =============================================================================
+    # DOWNLOAD BACKUPS TO LOCAL MACHINE
+    # =============================================================================
+    - name: Find all backup files
+      ansible.builtin.find:
+        paths: "{{ remote_backup_dir }}"
+        patterns: "*.sql.gz"
+      register: backup_files
+
+    - name: Download backups to local machine
+      ansible.builtin.fetch:
+        src: "{{ item.path }}"
+        dest: "{{ local_backup_dir }}/"
+        flat: true
+      loop: "{{ backup_files.files }}"
+      when: backup_files.files | length > 0
+
+    - name: Clean up remote backup directory
+      ansible.builtin.file:
+        path: "{{ remote_backup_dir }}"
+        state: absent
+
+    # =============================================================================
+    # SUMMARY
+    # =============================================================================
+    - name: Display backup summary
+      ansible.builtin.debug:
+        msg: |
+          ============================================
+          Database Backup Complete!
+          ============================================
+          Timestamp: {{ backup_timestamp }}
+          Local backup location: {{ local_backup_dir }}
+          
+          Total files backed up: {{ backup_files.files | length }}
+          
+          MySQL databases: {{ mysql_databases.stdout_lines | default([]) | length }}
+          PostgreSQL databases: {{ postgresql_databases.stdout_lines | default([]) | select('trim') | select() | list | length }}
+          
+          To restore a backup:
+          MySQL:      gunzip < backup_file.sql.gz | mysql database_name
+          PostgreSQL: gunzip < backup_file.sql.gz | psql database_name
+          ============================================
+      when: backup_files.files | length > 0
+
+    - name: Display no databases message
+      ansible.builtin.debug:
+        msg: |
+          ============================================
+          No databases found to backup.
+          ============================================
+          MySQL/MariaDB: {{ 'Not installed or not running' if mariadb_service.status is not defined or mariadb_service.status.ActiveState != 'active' else 'No user databases found' }}
+          PostgreSQL: {{ 'Not installed or not running' if postgresql_service.status is not defined or postgresql_service.status.ActiveState != 'active' else 'No user databases found' }}
+          ============================================
+      when: backup_files.files | length == 0
+

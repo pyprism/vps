@@ -38,6 +38,7 @@ show_help() {
     echo "Commands:"
     echo "  setup          Run full VPS setup with all enabled components"
     echo "  vnc            Install VNC with LXDE desktop environment"
+    echo "  backup         Backup all databases to local machine"
     echo "  check          Run in check mode (dry run)"
     echo "  <role>         Run a specific role (docker, nginx, nodejs, etc.)"
     echo ""
@@ -59,6 +60,7 @@ show_help() {
     echo "  ./run.sh setup -k           # Full setup with password prompt"
     echo "  ./run.sh setup -i ~/.ssh/id_rsa  # Full setup with specific key"
     echo "  ./run.sh vnc                # Install VNC only"
+    echo "  ./run.sh backup             # Backup all databases"
     echo "  ./run.sh docker             # Install Docker only"
     echo "  ./run.sh setup -v           # Full setup with verbose output"
 }
@@ -78,6 +80,7 @@ generate_inventory() {
     local vps_port=$(grep "^vps_ssh_port:" "$CONFIG_FILE" | awk '{print $2}' | tr -d '"' | tr -d "'")
     local ansible_user=$(grep "^ansible_user:" "$CONFIG_FILE" | awk '{print $2}' | tr -d '"' | tr -d "'")
     local python_interpreter=$(grep "^ansible_python_interpreter:" "$CONFIG_FILE" | awk '{print $2}' | tr -d '"' | tr -d "'")
+    local local_python=$(grep "^ansible_playbook_python:" "$CONFIG_FILE" | awk '{print $2}' | tr -d '"' | tr -d "'")
 
     if [ -z "$vps_host" ] || [ "$vps_host" == "your-vps-ip-or-hostname" ]; then
         print_msg "Error: Please configure vps_host in config.yml" "$RED"
@@ -87,10 +90,14 @@ generate_inventory() {
     vps_port=${vps_port:-22}
     ansible_user=${ansible_user:-root}
     python_interpreter=${python_interpreter:-/usr/bin/python3}
+    local_python=${local_python:-/usr/bin/python3}
 
     cat > "$INVENTORY_FILE" << EOF
 [vps]
 $vps_host ansible_port=$vps_port ansible_user=$ansible_user ansible_python_interpreter=$python_interpreter
+
+[local]
+127.0.0.1 ansible_connection=local ansible_python_interpreter=$local_python
 EOF
 
     print_msg "Generated inventory for: $vps_host" "$GREEN"
@@ -160,6 +167,15 @@ run_vnc() {
     local extra_args="$@"
     print_msg "Installing VNC with LXDE..." "$BLUE"
     ansible-playbook -i "$INVENTORY_FILE" playbooks/vnc.yml -e "@$CONFIG_FILE" $extra_args
+}
+
+# Run database backup
+run_backup() {
+    local extra_args="$@"
+    print_msg "Backing up databases..." "$BLUE"
+    # Don't pass config.yml as extra vars to avoid ansible_python_interpreter conflicts
+    # The inventory file already contains the necessary connection parameters
+    ansible-playbook -i "$INVENTORY_FILE" playbooks/backup.yml $extra_args
 }
 
 # Main
@@ -233,6 +249,13 @@ main() {
             install_collections
             generate_inventory
             run_vnc $extra_args
+            ;;
+        backup)
+            check_config
+            check_ansible
+            install_collections
+            generate_inventory
+            run_backup $extra_args
             ;;
         check)
             check_config

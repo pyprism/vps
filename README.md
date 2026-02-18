@@ -79,6 +79,33 @@ install_mysql: false  # Set to true if needed
 ./run.sh vnc
 ```
 
+### Backup Databases
+```bash
+./run.sh backup    # Backup all MySQL and PostgreSQL databases to local machine
+```
+
+#### Restore from backup
+
+##### MySQL/MariaDB
+```bash
+# Decompress and restore
+gunzip < backup/2026-02-17/mysql_dbname_*.sql.gz | mysql -u root -p dbname
+
+# Or in one command
+gunzip < backup/2026-02-17/mysql_dbname_*.sql.gz | mysql -u root -p dbname
+```
+
+##### PostgreSQL
+```bash
+# Decompress and restore
+gunzip < backup/2026-02-17/postgresql_dbname_*.sql.gz | psql -U postgres dbname
+
+# Or create database first if needed
+createdb dbname
+gunzip < backup/2026-02-17/postgresql_dbname_*.sql.gz | psql -U postgres dbname
+```
+
+
 ### Dry Run (Check Mode)
 ```bash
 ./run.sh check
