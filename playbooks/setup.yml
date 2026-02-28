@@ -87,6 +87,26 @@
       when: install_tailscale | default(true)
 
   post_tasks:
+    - name: Copy Cloudflare IP update script to server
+      ansible.builtin.copy:
+        src: ../scripts/update_cf_ips.sh
+        dest: /usr/local/bin/update_cf_ips.sh
+        owner: root
+        group: root
+        mode: '0750'
+      tags: cron
+
+    - name: Set up weekly cron job for Cloudflare IP update script
+      ansible.builtin.cron:
+        name: "Update Cloudflare IPs for Nginx"
+        minute: "0"
+        hour: "3"
+        weekday: "0"
+        job: "/bin/bash /usr/local/bin/update_cf_ips.sh >> /var/log/update_cf_ips.log 2>&1"
+        user: root
+        cron_file: update_cf_ips
+      tags: cron
+
     - name: Display setup completion summary
       ansible.builtin.debug:
         msg: |
