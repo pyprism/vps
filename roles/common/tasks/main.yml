@@ -54,6 +54,7 @@
       - vim
       - wget
       - zip
+      - apache2-utils
     state: present
     update_cache: false
 
